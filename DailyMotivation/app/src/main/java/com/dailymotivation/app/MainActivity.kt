@@ -19,7 +19,6 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -61,6 +60,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.time.Duration
@@ -765,43 +765,41 @@ fun IntroScreen(
 @Composable
 fun MainAndFavorites() {
 
-    var showFavorites by remember {
-        mutableStateOf(false)
-    }
+    val pagerState =
+        androidx.compose.foundation.pager.rememberPagerState(
+            initialPage = 0,
+            pageCount = { 2 }
+        )
 
-    AnimatedContent(
-        targetState = showFavorites,
-        transitionSpec = {
+    val coroutineScope =
+        androidx.compose.runtime.rememberCoroutineScope()
 
-            fadeIn(
-                animationSpec = tween(
-                    durationMillis = 700
+    androidx.compose.foundation.pager.HorizontalPager(
+        state = pagerState,
+        modifier = Modifier.fillMaxSize()
+    ) { page ->
+
+        when (page) {
+
+            0 -> {
+                HomeScreen(
+                    onFavorites = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(1)
+                        }
+                    }
                 )
-            ) togetherWith
-                    fadeOut(
-                        animationSpec = tween(
-                            durationMillis = 700
-                        )
-                    )
-        },
-        label = "favoritesTransition"
-    ) { favoritesVisible ->
+            }
 
-        if (favoritesVisible) {
-
-            FavoritesScreen(
-                onHome = {
-                    showFavorites = false
-                }
-            )
-
-        } else {
-
-            HomeScreen(
-                onFavorites = {
-                    showFavorites = true
-                }
-            )
+            1 -> {
+                FavoritesScreen(
+                    onHome = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(0)
+                        }
+                    }
+                )
+            }
         }
     }
 }
@@ -890,34 +888,7 @@ fun HomeScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .pointerInput(Unit) {
-
-                    var totalDrag = 0f
-
-                    detectHorizontalDragGestures(
-
-                        onHorizontalDrag = {
-                                _,
-                                dragAmount ->
-
-                            totalDrag += dragAmount
-                        },
-
-                        onDragEnd = {
-
-                            if (totalDrag > 100f) {
-
-                                onFavorites()
-                            }
-
-                            totalDrag = 0f
-                        },
-
-                        onDragCancel = {
-                            totalDrag = 0f
-                        }
-                    )
-                }
+                
         ) {
 
             AssetImage(
@@ -1237,34 +1208,7 @@ fun FavoritesScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .pointerInput(Unit) {
-
-                var totalDrag = 0f
-
-                detectHorizontalDragGestures(
-
-                    onHorizontalDrag = {
-                            _,
-                            dragAmount ->
-
-                        totalDrag += dragAmount
-                    },
-
-                    onDragEnd = {
-
-                        if (totalDrag < -100f) {
-
-                            onHome()
-                        }
-
-                        totalDrag = 0f
-                    },
-
-                    onDragCancel = {
-                        totalDrag = 0f
-                    }
-                )
-            }
+            
     ) {
 
         AssetImage(

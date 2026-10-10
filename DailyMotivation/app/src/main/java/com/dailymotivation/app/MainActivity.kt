@@ -17,6 +17,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -1137,9 +1138,32 @@ fun FavoritesScreen(
         mutableStateOf<Int?>(null)
     }
 
+    var horizontalDrag by remember {
+        mutableStateOf(0f)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures(
+                    onDragStart = {
+                        horizontalDrag = 0f
+                    },
+                    onHorizontalDrag = { change, dragAmount ->
+                        horizontalDrag += dragAmount
+                    },
+                    onDragEnd = {
+                        if (horizontalDrag > 80f) {
+                            onHome()
+                        }
+                        horizontalDrag = 0f
+                    },
+                    onDragCancel = {
+                        horizontalDrag = 0f
+                    }
+                )
+            }
             
     ) {
 

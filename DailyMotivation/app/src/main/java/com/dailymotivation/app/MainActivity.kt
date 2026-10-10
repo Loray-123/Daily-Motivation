@@ -398,7 +398,7 @@ fun FavoriteHeartButton(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(32.dp),
+                        .height(48.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom
                 ) {
@@ -415,9 +415,11 @@ fun FavoriteHeartButton(
                         text = "↶",
                         fontSize = 25.sp,
                         color = Color.White.copy(alpha = 0.95f),
-                        modifier = Modifier.graphicsLayer {
-                            rotationZ = -90f
-                        }
+                        modifier = Modifier
+                            .graphicsLayer {
+                                rotationZ = -90f
+                            }
+                            .padding(bottom = 0.dp)
                     )
                 }
             }

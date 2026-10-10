@@ -702,6 +702,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         DailyReminderScheduler.schedule(this)
+        DailyReminderScheduler.scheduleTest(this)
 
         if (
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&

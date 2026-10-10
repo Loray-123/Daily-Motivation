@@ -1049,15 +1049,6 @@ fun HomeScreen(
                     )
 
                     TextButton(
-                        text = "Favorites",
-                        modifier =
-                            Modifier.weight(1f),
-                        fontSize = 14.sp,
-                        onClick =
-                            onFavorites
-                    )
-
-                    TextButton(
                         text = "↗",
                         modifier =
                             Modifier.weight(1f),

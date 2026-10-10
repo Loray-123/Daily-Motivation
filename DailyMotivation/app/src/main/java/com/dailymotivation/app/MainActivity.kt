@@ -753,7 +753,7 @@ fun MainAndFavorites() {
 
 @Composable
 fun HomeScreen(
-    onFavorites: () -> Unit
+    onFavorites: (Float) -> Unit
 ) {
 
     val context = LocalContext.current

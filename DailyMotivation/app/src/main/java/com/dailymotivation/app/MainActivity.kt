@@ -285,6 +285,7 @@ fun TextButton(
 @Composable
 fun FavoriteHeartButton(
     isSaved: Boolean,
+    hasClickedHeart: Boolean,
     onClick: () -> Unit
 ) {
 
@@ -368,7 +369,7 @@ fun FavoriteHeartButton(
     ) {
 
         AnimatedContent(
-            targetState = isSaved,
+            targetState = hasClickedHeart,
             transitionSpec = {
 
                 fadeIn(
@@ -383,9 +384,9 @@ fun FavoriteHeartButton(
                         )
             },
             label = "favoriteHint"
-        ) { saved ->
+        ) { clicked ->
 
-            if (saved) {
+            if (clicked) {
 
                 Row(
                     modifier = Modifier
@@ -395,7 +396,6 @@ fun FavoriteHeartButton(
                         Alignment.Bottom
                 ) {
 
-                    // Keeps the arrow directly above the heart
                     Box(
                         modifier = Modifier
                             .width(70.dp)
@@ -444,10 +444,21 @@ fun FavoriteHeartButton(
 
             } else {
 
-                Spacer(
-                    modifier =
-                        Modifier.height(32.dp)
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(32.dp),
+                    contentAlignment = Alignment.BottomCenter
+                ) {
+
+                    Text(
+                        text = "Click to save",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.White.copy(alpha = 0.95f),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
 
@@ -466,7 +477,6 @@ fun FavoriteHeartButton(
                     Alignment.Center
             ) {
 
-                // Expanding heart glow
                 Box(
                     modifier = Modifier
                         .width(30.dp)
@@ -511,22 +521,6 @@ fun FavoriteHeartButton(
                 modifier =
                     Modifier.width(8.dp)
             )
-
-            if (isSaved) {
-
-                Text(
-                    text =
-                        "Swipe right to see your favorites",
-                    fontSize = 12.sp,
-                    fontWeight =
-                        FontWeight.Medium,
-                    color =
-                        Color.White.copy(
-                            alpha = 0.95f
-                        ),
-                    maxLines = 1
-                )
-            }
         }
     }
 }
@@ -874,6 +868,15 @@ fun HomeScreen(
         )
     }
 
+    var hasClickedHeart by remember {
+        mutableStateOf(
+            preferences.getBoolean(
+                "hasClickedFavoriteHeart",
+                false
+            )
+        )
+    }
+
     val isSaved =
         favoriteSet.contains(
             quoteIndex.toString()
@@ -1038,7 +1041,18 @@ fun HomeScreen(
 
                     FavoriteHeartButton(
                         isSaved = isSaved,
+                        hasClickedHeart = hasClickedHeart,
                         onClick = {
+
+                            if (!hasClickedHeart) {
+                                hasClickedHeart = true
+                                preferences.edit()
+                                    .putBoolean(
+                                        "hasClickedFavoriteHeart",
+                                        true
+                                    )
+                                    .apply()
+                            }
 
                             val newFavorites =
                                 favoriteSet

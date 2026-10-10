@@ -4,6 +4,17 @@ package com.dailymotivation.app
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color as AndroidColor
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.RectF
+import android.graphics.Shader
+import android.graphics.Typeface
+import android.net.Uri
+import androidx.core.content.FileProvider
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -244,6 +255,150 @@ fun AssetImage(
                 ContentScale.Crop
         )
     }
+}
+
+
+// ------------------------------------------------------------
+// SHARE QUOTE IMAGE
+// ------------------------------------------------------------
+
+fun createQuoteShareImage(
+    context: Context,
+    backgroundImage: String,
+    quote: Quote
+): Uri {
+    val width = 1080
+    val height = 1350
+    val outputBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(outputBitmap)
+
+    val sourceBitmap = context.assets.open("backgrounds/$backgroundImage").use {
+        BitmapFactory.decodeStream(it)
+    } ?: throw IllegalStateException("Unable to load background image")
+
+    val sourceRatio = sourceBitmap.width.toFloat() / sourceBitmap.height
+    val targetRatio = width.toFloat() / height
+    val sourceRect = if (sourceRatio > targetRatio) {
+        val cropWidth = (sourceBitmap.height * targetRatio).toInt()
+        val left = (sourceBitmap.width - cropWidth) / 2
+        Rect(left, 0, left + cropWidth, sourceBitmap.height)
+    } else {
+        val cropHeight = (sourceBitmap.width / targetRatio).toInt()
+        val top = (sourceBitmap.height - cropHeight) / 2
+        Rect(0, top, sourceBitmap.width, top + cropHeight)
+    }
+
+    canvas.drawBitmap(
+        sourceBitmap,
+        sourceRect,
+        Rect(0, 0, width, height),
+        Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
+    )
+    sourceBitmap.recycle()
+
+    val shadePaint = Paint().apply {
+        shader = LinearGradient(
+            0f, 0f, 0f, height.toFloat(),
+            intArrayOf(
+                AndroidColor.argb(95, 0, 0, 0),
+                AndroidColor.argb(125, 0, 0, 0),
+                AndroidColor.argb(185, 0, 0, 0)
+            ),
+            floatArrayOf(0f, 0.48f, 1f),
+            Shader.TileMode.CLAMP
+        )
+    }
+    canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), shadePaint)
+
+    val white = AndroidColor.WHITE
+    val brandPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = white
+        textAlign = Paint.Align.CENTER
+        textSize = 35f
+        letterSpacing = 0.18f
+        typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+    }
+    canvas.drawText("D A I L Y", width / 2f, 170f, brandPaint)
+
+    val titlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = white
+        textAlign = Paint.Align.CENTER
+        textSize = 78f
+        typeface = Typeface.create("serif", Typeface.NORMAL)
+        setShadowLayer(8f, 0f, 3f, AndroidColor.argb(130, 0, 0, 0))
+    }
+    canvas.drawText("Motivation", width / 2f, 250f, titlePaint)
+
+    val dividerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = AndroidColor.argb(210, 255, 255, 255)
+        strokeWidth = 2f
+    }
+    canvas.drawLine(365f, 310f, 715f, 310f, dividerPaint)
+
+    val quotePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = white
+        textAlign = Paint.Align.CENTER
+        textSize = 49f
+        typeface = Typeface.create("serif", Typeface.NORMAL)
+        setShadowLayer(7f, 0f, 2f, AndroidColor.argb(160, 0, 0, 0))
+    }
+    val maxTextWidth = 850f
+    val quoteLines = wrapShareText("“${quote.text}”", quotePaint, maxTextWidth)
+    val lineHeight = 68f
+    val quoteBlockHeight = quoteLines.size * lineHeight
+    var textY = (height * 0.52f) - quoteBlockHeight / 2f + lineHeight / 2f
+    quoteLines.forEach { line ->
+        canvas.drawText(line, width / 2f, textY, quotePaint)
+        textY += lineHeight
+    }
+
+    val authorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = AndroidColor.argb(240, 255, 255, 255)
+        textAlign = Paint.Align.CENTER
+        textSize = 27f
+        letterSpacing = 0.12f
+        typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+    }
+    canvas.drawText("— ${quote.author.uppercase()} —", width / 2f, textY + 58f, authorPaint)
+
+    val footerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = AndroidColor.argb(220, 255, 255, 255)
+        textAlign = Paint.Align.CENTER
+        textSize = 23f
+        letterSpacing = 0.08f
+        typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+    }
+    canvas.drawText("A LITTLE INSPIRATION FOR EVERY DAY", width / 2f, 1265f, footerPaint)
+
+    val shareDirectory = java.io.File(context.cacheDir, "shared_quotes")
+    if (!shareDirectory.exists()) shareDirectory.mkdirs()
+    val imageFile = java.io.File(shareDirectory, "daily_motivation_quote.png")
+    imageFile.outputStream().use { output ->
+        outputBitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
+    }
+    outputBitmap.recycle()
+
+    return FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.fileprovider",
+        imageFile
+    )
+}
+
+fun wrapShareText(text: String, paint: Paint, maxWidth: Float): List<String> {
+    val lines = mutableListOf<String>()
+    var currentLine = ""
+    text.split(" ").forEach { word ->
+        val candidate = if (currentLine.isEmpty()) word else "$currentLine $word"
+        if (currentLine.isNotEmpty() && paint.measureText(candidate) > maxWidth) {
+            lines.add(currentLine)
+            currentLine = word
+        } else {
+            currentLine = candidate
+        }
+    }
+    if (currentLine.isNotEmpty()) lines.add(currentLine)
+    return lines
 }
 
 
@@ -1035,37 +1190,45 @@ fun HomeScreen(
 
                     TextButton(
                         text = "↗",
-                        modifier =
-                            Modifier.weight(1f),
+                        modifier = Modifier.weight(1f),
                         fontSize = 26.sp,
                         onClick = {
+                            val shareUri = try {
+                                createQuoteShareImage(
+                                    context = context,
+                                    backgroundImage = backgroundImage,
+                                    quote = quote
+                                )
+                            } catch (e: Exception) {
+                                null
+                            }
 
-                            val shareText =
-                                "Today's Daily Motivation:\n\n" +
-                                        "“${quote.text}”\n\n" +
-                                        "— ${quote.author}"
-
-                            val sendIntent =
-                                Intent().apply {
-
-                                    action =
-                                        Intent.ACTION_SEND
-
+                            if (shareUri != null) {
+                                val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "image/png"
+                                    putExtra(Intent.EXTRA_STREAM, shareUri)
+                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                    clipData = android.content.ClipData.newUri(
+                                        context.contentResolver,
+                                        "Daily Motivation quote",
+                                        shareUri
+                                    )
+                                }
+                                context.startActivity(
+                                    Intent.createChooser(sendIntent, "Share Quote Card")
+                                )
+                            } else {
+                                val fallbackIntent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
                                     putExtra(
                                         Intent.EXTRA_TEXT,
-                                        shareText
+                                        "“${quote.text}”\n\n— ${quote.author}\n\nDaily Motivation"
                                     )
-
-                                    type =
-                                        "text/plain"
                                 }
-
-                            context.startActivity(
-                                Intent.createChooser(
-                                    sendIntent,
-                                    "Share Motivation"
+                                context.startActivity(
+                                    Intent.createChooser(fallbackIntent, "Share Motivation")
                                 )
-                            )
+                            }
                         }
                     )
                 }

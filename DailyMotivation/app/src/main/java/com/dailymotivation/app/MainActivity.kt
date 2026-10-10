@@ -325,7 +325,7 @@ fun createQuoteShareImage(
         color = white
         textAlign = Paint.Align.CENTER
         textSize = 78f
-        typeface = Typeface.create("serif", Typeface.NORMAL)
+        typeface = Typeface.create("cursive", Typeface.NORMAL)
         setShadowLayer(8f, 0f, 3f, AndroidColor.argb(130, 0, 0, 0))
     }
     canvas.drawText("Motivation", width / 2f, 250f, titlePaint)
@@ -340,7 +340,7 @@ fun createQuoteShareImage(
         color = white
         textAlign = Paint.Align.CENTER
         textSize = 49f
-        typeface = Typeface.create("serif", Typeface.NORMAL)
+        typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
         setShadowLayer(7f, 0f, 2f, AndroidColor.argb(160, 0, 0, 0))
     }
     val maxTextWidth = 850f

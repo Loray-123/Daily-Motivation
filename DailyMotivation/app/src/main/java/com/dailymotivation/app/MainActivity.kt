@@ -1449,15 +1449,48 @@ fun FavoritesScreen(
 
             Text(
                 text = "My Favorites",
-                fontSize = 34.sp,
+                fontSize = 49.sp,
                 fontFamily =
                     FontFamily.Cursive,
+                fontWeight =
+                    FontWeight.Normal,
                 color = Color.White,
                 modifier =
                     Modifier.fillMaxWidth(),
                 textAlign =
                     TextAlign.Center
             )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .width(58.dp)
+                        .height(1.dp)
+                        .background(
+                            Color.White.copy(alpha = 0.75f)
+                        )
+                )
+
+                Text(
+                    text = "♡",
+                    fontSize = 29.sp,
+                    color = Color.White,
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                )
+
+                Box(
+                    modifier = Modifier
+                        .width(58.dp)
+                        .height(1.dp)
+                        .background(
+                            Color.White.copy(alpha = 0.75f)
+                        )
+                )
+            }
 
             Spacer(
                 modifier =

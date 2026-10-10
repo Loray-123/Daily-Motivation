@@ -371,7 +371,6 @@ fun FavoriteHeartButton(
         AnimatedContent(
             targetState = hasClickedHeart,
             transitionSpec = {
-
                 fadeIn(
                     animationSpec = tween(
                         durationMillis = 450
@@ -388,75 +387,41 @@ fun FavoriteHeartButton(
 
             if (clicked) {
 
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(32.dp)
+                )
+
+            } else {
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(32.dp),
-                    verticalAlignment =
-                        Alignment.Bottom
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Center
                 ) {
-
-                    Box(
-                        modifier = Modifier
-                            .width(70.dp)
-                            .height(32.dp),
-                        contentAlignment =
-                            Alignment.BottomCenter
-                    ) {
-
-                        Text(
-                            text = "↶",
-                            fontSize = 25.sp,
-                            color =
-                                Color.White.copy(
-                                    alpha = 0.95f
-                                ),
-                            modifier =
-                                Modifier
-                                    .graphicsLayer {
-                                        rotationZ = -20f
-                                    }
-                        )
-                    }
-
-                    Spacer(
-                        modifier =
-                            Modifier.width(2.dp)
-                    )
 
                     Text(
-                        text =
-                            "Swipe right to see your favorites",
-                        fontSize = 12.sp,
-                        fontWeight =
-                            FontWeight.Medium,
-                        color =
-                            Color.White.copy(
-                                alpha = 0.95f
-                            ),
-                        textAlign =
-                            TextAlign.Start,
-                        maxLines = 1,
-                        modifier =
-                            Modifier.weight(1f)
+                        text = "↶",
+                        fontSize = 25.sp,
+                        color = Color.White.copy(alpha = 0.95f),
+                        modifier = Modifier.graphicsLayer {
+                            rotationZ = -20f
+                        }
                     )
-                }
 
-            } else {
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(32.dp),
-                    contentAlignment = Alignment.BottomCenter
-                ) {
+                    Spacer(
+                        modifier = Modifier.width(6.dp)
+                    )
 
                     Text(
                         text = "Click to save",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.White.copy(alpha = 0.95f),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Start
                     )
                 }
             }

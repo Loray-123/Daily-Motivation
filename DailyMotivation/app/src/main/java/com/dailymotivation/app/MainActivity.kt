@@ -531,7 +531,7 @@ fun FavoriteHeartButton(
 
     Column(
         modifier = Modifier
-            .width(230.dp)
+            .width(70.dp)
             .animateContentSize(),
         horizontalAlignment =
             Alignment.CenterHorizontally

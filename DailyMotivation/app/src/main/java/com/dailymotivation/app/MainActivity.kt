@@ -610,7 +610,7 @@ fun FavoriteHeartButton(
                 Text(
                     text =
                         if (isSaved) "♥" else "♡",
-                    fontSize = 27.sp,
+                    fontSize = 34.sp,
                     color = Color.White,
                     modifier = Modifier
                         .scale(heartScale.value)

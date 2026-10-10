@@ -10,7 +10,6 @@ import android.graphics.Color as AndroidColor
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Typeface
 import android.net.Uri
@@ -56,6 +55,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -315,7 +315,6 @@ fun createQuoteShareImage(
         color = white
         textAlign = Paint.Align.CENTER
         textSize = 35f
-        letterSpacing = 0.18f
         typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
     }
     canvas.drawText("D A I L Y", width / 2f, 170f, brandPaint)
@@ -356,7 +355,6 @@ fun createQuoteShareImage(
         color = AndroidColor.argb(240, 255, 255, 255)
         textAlign = Paint.Align.CENTER
         textSize = 27f
-        letterSpacing = 0.12f
         typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
     }
     canvas.drawText("— ${quote.author.uppercase()} —", width / 2f, textY + 58f, authorPaint)
@@ -365,7 +363,6 @@ fun createQuoteShareImage(
         color = AndroidColor.argb(220, 255, 255, 255)
         textAlign = Paint.Align.CENTER
         textSize = 23f
-        letterSpacing = 0.08f
         typeface = Typeface.create("sans-serif", Typeface.NORMAL)
     }
     canvas.drawText("A LITTLE INSPIRATION FOR EVERY DAY", width / 2f, 1265f, footerPaint)
@@ -657,6 +654,7 @@ class MainActivity : ComponentActivity() {
 fun DailyMotivationApp() {
 
     val context = LocalContext.current
+    val shareScope = rememberCoroutineScope()
 
     val today = rememberCurrentDate()
 
@@ -1193,41 +1191,45 @@ fun HomeScreen(
                         modifier = Modifier.weight(1f),
                         fontSize = 26.sp,
                         onClick = {
-                            val shareUri = try {
-                                createQuoteShareImage(
-                                    context = context,
-                                    backgroundImage = backgroundImage,
-                                    quote = quote
-                                )
-                            } catch (e: Exception) {
-                                null
-                            }
+                            shareScope.launch {
+                                val shareUri = withContext(Dispatchers.IO) {
+                                    try {
+                                        createQuoteShareImage(
+                                            context = context,
+                                            backgroundImage = backgroundImage,
+                                            quote = quote
+                                        )
+                                    } catch (e: Exception) {
+                                        null
+                                    }
+                                }
 
-                            if (shareUri != null) {
-                                val sendIntent = Intent(Intent.ACTION_SEND).apply {
-                                    type = "image/png"
-                                    putExtra(Intent.EXTRA_STREAM, shareUri)
-                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                    clipData = android.content.ClipData.newUri(
-                                        context.contentResolver,
-                                        "Daily Motivation quote",
-                                        shareUri
+                                if (shareUri != null) {
+                                    val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                                        type = "image/png"
+                                        putExtra(Intent.EXTRA_STREAM, shareUri)
+                                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                        clipData = android.content.ClipData.newUri(
+                                            context.contentResolver,
+                                            "Daily Motivation quote",
+                                            shareUri
+                                        )
+                                    }
+                                    context.startActivity(
+                                        Intent.createChooser(sendIntent, "Share Quote Card")
+                                    )
+                                } else {
+                                    val fallbackIntent = Intent(Intent.ACTION_SEND).apply {
+                                        type = "text/plain"
+                                        putExtra(
+                                            Intent.EXTRA_TEXT,
+                                            "“${quote.text}”\n\n— ${quote.author}\n\nDaily Motivation"
+                                        )
+                                    }
+                                    context.startActivity(
+                                        Intent.createChooser(fallbackIntent, "Share Motivation")
                                     )
                                 }
-                                context.startActivity(
-                                    Intent.createChooser(sendIntent, "Share Quote Card")
-                                )
-                            } else {
-                                val fallbackIntent = Intent(Intent.ACTION_SEND).apply {
-                                    type = "text/plain"
-                                    putExtra(
-                                        Intent.EXTRA_TEXT,
-                                        "“${quote.text}”\n\n— ${quote.author}\n\nDaily Motivation"
-                                    )
-                                }
-                                context.startActivity(
-                                    Intent.createChooser(fallbackIntent, "Share Motivation")
-                                )
                             }
                         }
                     )

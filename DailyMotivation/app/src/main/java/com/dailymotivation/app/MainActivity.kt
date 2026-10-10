@@ -398,9 +398,10 @@ fun FavoriteHeartButton(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(32.dp),
+                        .height(32.dp)
+                        .padding(start = 24.dp),
                     verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Start
                 ) {
 
                     Text(

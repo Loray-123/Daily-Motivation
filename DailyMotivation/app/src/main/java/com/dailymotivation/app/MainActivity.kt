@@ -334,7 +334,18 @@ fun createQuoteShareImage(
         color = AndroidColor.argb(210, 255, 255, 255)
         strokeWidth = 2f
     }
-    canvas.drawLine(365f, 310f, 715f, 310f, dividerPaint)
+    // Match the home screen's small heart framed by two fine lines.
+    canvas.drawLine(365f, 330f, 455f, 330f, dividerPaint)
+    canvas.drawLine(625f, 330f, 715f, 330f, dividerPaint)
+
+    val heartPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = white
+        textAlign = Paint.Align.CENTER
+        textSize = 58f
+        typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+        setShadowLayer(5f, 0f, 2f, AndroidColor.argb(100, 0, 0, 0))
+    }
+    canvas.drawText("♡", width / 2f, 350f, heartPaint)
 
     val quotePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = white
@@ -362,12 +373,12 @@ fun createQuoteShareImage(
     canvas.drawText("— ${quote.author.uppercase()} —", width / 2f, textY + 58f, authorPaint)
 
     val footerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = AndroidColor.argb(220, 255, 255, 255)
+        color = AndroidColor.argb(230, 255, 255, 255)
         textAlign = Paint.Align.CENTER
-        textSize = 23f
+        textSize = 42f
         typeface = Typeface.create("sans-serif", Typeface.NORMAL)
     }
-    canvas.drawText("A LITTLE INSPIRATION FOR EVERY DAY", width / 2f, 1265f, footerPaint)
+    canvas.drawText("A little inspiration for every day.", width / 2f, 1265f, footerPaint)
 
     val shareDirectory = java.io.File(context.cacheDir, "shared_quotes")
     if (!shareDirectory.exists()) shareDirectory.mkdirs()

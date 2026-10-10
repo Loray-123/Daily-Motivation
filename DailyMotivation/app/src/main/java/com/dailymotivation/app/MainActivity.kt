@@ -651,30 +651,37 @@ fun ShareIconButton(
     Box(
         modifier = Modifier
             .width(70.dp)
-            .height(55.dp)
+            .height(87.dp)
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = onClick
             ),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.BottomCenter
     ) {
-        ComposeCanvas(
+        Box(
             modifier = Modifier
-                .width(28.dp)
-                .height(28.dp)
+                .fillMaxWidth()
+                .height(55.dp),
+            contentAlignment = Alignment.Center
         ) {
-            val stroke = 1.8.dp.toPx()
-            val radius = 3.1.dp.toPx()
-            val left = Offset(size.width * 0.23f, size.height * 0.50f)
-            val topRight = Offset(size.width * 0.76f, size.height * 0.22f)
-            val bottomRight = Offset(size.width * 0.76f, size.height * 0.78f)
+            ComposeCanvas(
+                modifier = Modifier
+                    .width(28.dp)
+                    .height(28.dp)
+            ) {
+                val stroke = 1.8.dp.toPx()
+                val radius = 3.1.dp.toPx()
+                val left = Offset(size.width * 0.23f, size.height * 0.50f)
+                val topRight = Offset(size.width * 0.76f, size.height * 0.22f)
+                val bottomRight = Offset(size.width * 0.76f, size.height * 0.78f)
 
-            drawLine(Color.White.copy(alpha = 0.9f), left, topRight, strokeWidth = stroke)
-            drawLine(Color.White.copy(alpha = 0.9f), left, bottomRight, strokeWidth = stroke)
-            drawCircle(Color.White, radius, left)
-            drawCircle(Color.White, radius, topRight)
-            drawCircle(Color.White, radius, bottomRight)
+                drawLine(Color.White.copy(alpha = 0.9f), left, topRight, strokeWidth = stroke)
+                drawLine(Color.White.copy(alpha = 0.9f), left, bottomRight, strokeWidth = stroke)
+                drawCircle(Color.White, radius, left)
+                drawCircle(Color.White, radius, topRight)
+                drawCircle(Color.White, radius, bottomRight)
+            }
         }
     }
 }

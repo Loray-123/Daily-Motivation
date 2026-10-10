@@ -45,7 +45,7 @@ object DailyReminderScheduler {
         )
     }
 
-    fun scheduleTest(context: Context) {
+    fun cancelTest(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val testIntent = PendingIntent.getBroadcast(
             context,
@@ -53,12 +53,8 @@ object DailyReminderScheduler {
             Intent(context, DailyReminderReceiver::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-
-        alarmManager.setAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            System.currentTimeMillis() + 60_000L,
-            testIntent
-        )
+        alarmManager.cancel(testIntent)
+        testIntent.cancel()
     }
 
     fun showReminder(context: Context) {

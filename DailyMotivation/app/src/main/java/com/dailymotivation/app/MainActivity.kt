@@ -285,7 +285,6 @@ fun TextButton(
 @Composable
 fun FavoriteHeartButton(
     isSaved: Boolean,
-    hasClickedHeart: Boolean,
     onClick: () -> Unit
 ) {
 
@@ -368,64 +367,46 @@ fun FavoriteHeartButton(
             Alignment.CenterHorizontally
     ) {
 
-        AnimatedContent(
-            targetState = hasClickedHeart,
-            transitionSpec = {
-                fadeIn(
-                    animationSpec = tween(
-                        durationMillis = 450
-                    )
-                ) togetherWith
-                        fadeOut(
-                            animationSpec = tween(
-                                durationMillis = 250
-                            )
-                        )
-            },
-            label = "favoriteHint"
-        ) { clicked ->
+        if (!isSaved) {
 
-            if (clicked || isSaved) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(32.dp)
+                    .padding(start = 24.dp),
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.Start
+            ) {
 
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(32.dp)
+                Text(
+                    text = "↶",
+                    fontSize = 25.sp,
+                    color = Color.White.copy(alpha = 0.95f),
+                    modifier = Modifier.graphicsLayer {
+                        rotationZ = -20f
+                    }
                 )
 
-            } else {
+                Spacer(
+                    modifier = Modifier.width(6.dp)
+                )
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(32.dp)
-                        .padding(start = 24.dp),
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.Start
-                ) {
-
-                    Text(
-                        text = "↶",
-                        fontSize = 25.sp,
-                        color = Color.White.copy(alpha = 0.95f),
-                        modifier = Modifier.graphicsLayer {
-                            rotationZ = -20f
-                        }
-                    )
-
-                    Spacer(
-                        modifier = Modifier.width(6.dp)
-                    )
-
-                    Text(
-                        text = "Click to save",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.White.copy(alpha = 0.95f),
-                        textAlign = TextAlign.Start
-                    )
-                }
+                Text(
+                    text = "Click to save",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White.copy(alpha = 0.95f),
+                    textAlign = TextAlign.Start
+                )
             }
+
+        } else {
+
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(32.dp)
+            )
         }
 
         Row(
@@ -834,10 +815,6 @@ fun HomeScreen(
         )
     }
 
-    var hasClickedHeart by remember {
-        mutableStateOf(false)
-    }
-
     val isSaved =
         favoriteSet.contains(
             quoteIndex.toString()
@@ -1002,12 +979,7 @@ fun HomeScreen(
 
                     FavoriteHeartButton(
                         isSaved = isSaved,
-                        hasClickedHeart = hasClickedHeart,
                         onClick = {
-
-                            if (!hasClickedHeart) {
-                                hasClickedHeart = true
-                            }
 
                             val newFavorites =
                                 favoriteSet

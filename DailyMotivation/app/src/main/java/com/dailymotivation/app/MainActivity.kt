@@ -17,6 +17,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -830,7 +831,26 @@ fun HomeScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                
+                .pointerInput(onFavorites) {
+                    var horizontalDrag = 0f
+                    detectHorizontalDragGestures(
+                        onDragStart = {
+                            horizontalDrag = 0f
+                        },
+                        onHorizontalDrag = { _, dragAmount ->
+                            horizontalDrag += dragAmount
+                        },
+                        onDragEnd = {
+                            if (kotlin.math.abs(horizontalDrag) > 80f) {
+                                onFavorites()
+                            }
+                            horizontalDrag = 0f
+                        },
+                        onDragCancel = {
+                            horizontalDrag = 0f
+                        }
+                    )
+                }
         ) {
 
             AssetImage(

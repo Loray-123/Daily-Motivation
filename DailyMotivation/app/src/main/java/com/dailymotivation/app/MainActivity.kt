@@ -10,6 +10,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -707,42 +709,39 @@ fun IntroScreen(
 @Composable
 fun MainAndFavorites() {
 
-    val pagerState =
-        androidx.compose.foundation.pager.rememberPagerState(
-            initialPage = 0,
-            pageCount = { 2 }
-        )
+    var showFavorites by remember { mutableStateOf(false) }
+    var swipeDirection by remember { mutableStateOf(-1f) }
 
-    val coroutineScope =
-        androidx.compose.runtime.rememberCoroutineScope()
-
-    androidx.compose.foundation.pager.HorizontalPager(
-        state = pagerState,
-        modifier = Modifier.fillMaxSize(),
-        userScrollEnabled = true
-    ) { page ->
-
-        when (page) {
-
-            0 -> {
-                HomeScreen(
-                    onFavorites = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(1)
-                        }
-                    }
-                )
-            }
-
-            1 -> {
-                FavoritesScreen(
-                    onHome = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(0)
-                        }
-                    }
-                )
-            }
+    AnimatedContent(
+        targetState = showFavorites,
+        transitionSpec = {
+            val enteringFrom = if (swipeDirection > 0f) -1 else 1
+            val exitingTo = -enteringFrom
+            (androidx.compose.animation.slideInHorizontally(
+                animationSpec = tween(280),
+                initialOffsetX = { fullWidth -> fullWidth * enteringFrom }
+            ) + fadeIn(animationSpec = tween(180))) togetherWith
+                (androidx.compose.animation.slideOutHorizontally(
+                    animationSpec = tween(280),
+                    targetOffsetX = { fullWidth -> fullWidth * exitingTo }
+                ) + fadeOut(animationSpec = tween(180)))
+        },
+        label = "home_favorites_page"
+    ) { favoritesPage ->
+        if (favoritesPage) {
+            FavoritesScreen(
+                onHome = {
+                    swipeDirection = 1f
+                    showFavorites = false
+                }
+            )
+        } else {
+            HomeScreen(
+                onFavorites = { direction ->
+                    swipeDirection = direction
+                    showFavorites = true
+                }
+            )
         }
     }
 }
@@ -842,7 +841,7 @@ fun HomeScreen(
                         },
                         onDragEnd = {
                             if (kotlin.math.abs(horizontalDrag) > 80f) {
-                                onFavorites()
+                                onFavorites(if (horizontalDrag > 0f) 1f else -1f)
                             }
                             horizontalDrag = 0f
                         },

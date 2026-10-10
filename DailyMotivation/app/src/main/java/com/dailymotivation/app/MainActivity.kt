@@ -1011,13 +1011,13 @@ fun HomeScreen(
         )
 
     val showFavoritesSwipeHint = remember {
-        !preferences.getBoolean("has_seen_favorites_swipe_hint", false)
+        !preferences.getBoolean("has_seen_favorites_swipe_hint_v2", false)
     }
 
     LaunchedEffect(Unit) {
         if (showFavoritesSwipeHint) {
             preferences.edit()
-                .putBoolean("has_seen_favorites_swipe_hint", true)
+                .putBoolean("has_seen_favorites_swipe_hint_v2", true)
                 .apply()
         }
     }
@@ -1204,7 +1204,7 @@ fun HomeScreen(
                         .padding(
                             start = 24.dp,
                             end = 24.dp,
-                            bottom = 12.dp
+                            bottom = 38.dp
                         ),
                     horizontalArrangement =
                         Arrangement.SpaceBetween,

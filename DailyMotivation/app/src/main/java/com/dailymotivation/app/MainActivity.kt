@@ -834,12 +834,7 @@ fun HomeScreen(
     }
 
     var hasClickedHeart by remember {
-        mutableStateOf(
-            preferences.getBoolean(
-                "hasClickedFavoriteHeart",
-                false
-            )
-        )
+        mutableStateOf(false)
     }
 
     val isSaved =
@@ -1011,12 +1006,6 @@ fun HomeScreen(
 
                             if (!hasClickedHeart) {
                                 hasClickedHeart = true
-                                preferences.edit()
-                                    .putBoolean(
-                                        "hasClickedFavoriteHeart",
-                                        true
-                                    )
-                                    .apply()
                             }
 
                             val newFavorites =

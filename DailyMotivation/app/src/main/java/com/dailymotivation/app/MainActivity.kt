@@ -1202,7 +1202,8 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
-                            horizontal = 24.dp,
+                            start = 24.dp,
+                            end = 24.dp,
                             bottom = 12.dp
                         ),
                     horizontalArrangement =

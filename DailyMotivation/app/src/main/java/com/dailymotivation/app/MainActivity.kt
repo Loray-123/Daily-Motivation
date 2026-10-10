@@ -29,6 +29,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -60,6 +61,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
@@ -628,6 +630,46 @@ fun FavoriteHeartButton(
 }
 
 // ------------------------------------------------------------
+// SHARE ICON BUTTON
+// ------------------------------------------------------------
+
+@Composable
+fun ShareIconButton(
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .width(70.dp)
+            .height(55.dp)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(
+            modifier = Modifier
+                .width(28.dp)
+                .height(28.dp)
+        ) {
+            val stroke = 1.8.dp.toPx()
+            val radius = 3.1.dp.toPx()
+            val left = Offset(size.width * 0.23f, size.height * 0.50f)
+            val topRight = Offset(size.width * 0.76f, size.height * 0.22f)
+            val bottomRight = Offset(size.width * 0.76f, size.height * 0.78f)
+
+            drawLine(Color.White.copy(alpha = 0.9f), left, topRight, strokeWidth = stroke)
+            drawLine(Color.White.copy(alpha = 0.9f), left, bottomRight, strokeWidth = stroke)
+            drawCircle(Color.White, radius, left)
+            drawCircle(Color.White, radius, topRight)
+            drawCircle(Color.White, radius, bottomRight)
+        }
+    }
+}
+
+
+// ------------------------------------------------------------
 // MAIN ACTIVITY
 // ------------------------------------------------------------
 
@@ -1186,10 +1228,7 @@ fun HomeScreen(
                         }
                     )
 
-                    TextButton(
-                        text = "↗",
-                        modifier = Modifier.weight(1f),
-                        fontSize = 26.sp,
+                    ShareIconButton(
                         onClick = {
                             shareScope.launch {
                                 val shareUri = withContext(Dispatchers.IO) {

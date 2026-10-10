@@ -1011,13 +1011,13 @@ fun HomeScreen(
         )
 
     val showFavoritesSwipeHint = remember {
-        !preferences.getBoolean("has_seen_favorites_swipe_hint_v2", false)
+        !preferences.getBoolean("has_seen_favorites_swipe_hint_v3", false)
     }
 
     LaunchedEffect(Unit) {
         if (showFavoritesSwipeHint) {
             preferences.edit()
-                .putBoolean("has_seen_favorites_swipe_hint_v2", true)
+                .putBoolean("has_seen_favorites_swipe_hint_v3", true)
                 .apply()
         }
     }
@@ -1189,12 +1189,13 @@ fun HomeScreen(
                 if (showFavoritesSwipeHint) {
                     Text(
                         text = "Swipe right to see your favorites  →",
-                        fontSize = 12.sp,
-                        color = Color.White.copy(alpha = 0.85f),
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.White,
                         textAlign = TextAlign.End,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 8.dp)
+                            .padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 12.dp)
                     )
                 }
 

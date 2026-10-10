@@ -47,7 +47,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
@@ -537,48 +536,6 @@ fun FavoriteHeartButton(
         horizontalAlignment =
             Alignment.CenterHorizontally
     ) {
-
-        if (!isSaved) {
-
-            Row(
-                modifier = Modifier
-                    .requiredWidth(230.dp)
-                    .height(32.dp)
-                    .padding(start = 24.dp),
-                verticalAlignment = Alignment.Bottom,
-                horizontalArrangement = Arrangement.Start
-            ) {
-
-                Text(
-                    text = "↶",
-                    fontSize = 25.sp,
-                    color = Color.White.copy(alpha = 0.95f),
-                    modifier = Modifier.graphicsLayer {
-                        rotationZ = -20f
-                    }
-                )
-
-                Spacer(
-                    modifier = Modifier.width(6.dp)
-                )
-
-                Text(
-                    text = "Click to save",
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.White.copy(alpha = 0.95f),
-                    textAlign = TextAlign.Start
-                )
-            }
-
-        } else {
-
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(32.dp)
-            )
-        }
 
         Row(
             modifier =

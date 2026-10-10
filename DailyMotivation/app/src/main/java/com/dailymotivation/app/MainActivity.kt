@@ -1053,6 +1053,18 @@ fun HomeScreen(
             quoteIndex.toString()
         )
 
+    val showFavoritesSwipeHint = remember {
+        !preferences.getBoolean("has_seen_favorites_swipe_hint", false)
+    }
+
+    LaunchedEffect(Unit) {
+        if (showFavoritesSwipeHint) {
+            preferences.edit()
+                .putBoolean("has_seen_favorites_swipe_hint", true)
+                .apply()
+        }
+    }
+
     Surface(
         modifier =
             Modifier.fillMaxSize(),
@@ -1217,6 +1229,18 @@ fun HomeScreen(
                     )
                 }
 
+                if (showFavoritesSwipeHint) {
+                    Text(
+                        text = "Swipe right to see your favorites  →",
+                        fontSize = 12.sp,
+                        color = Color.White.copy(alpha = 0.85f),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 4.dp, bottom = 8.dp)
+                    )
+                }
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -1308,15 +1332,6 @@ fun HomeScreen(
                     )
                 }
 
-                Text(
-                    text = "Swipe right to see your favorites  →",
-                    fontSize = 12.sp,
-                    color = Color.White.copy(alpha = 0.85f),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 2.dp, bottom = 4.dp)
-                )
             }
         }
     }

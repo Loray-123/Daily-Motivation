@@ -1158,7 +1158,20 @@ fun FavoritesScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(onHome) {
+                var horizontalDrag = 0f
+                detectHorizontalDragGestures(
+                    onDragStart = { horizontalDrag = 0f },
+                    onHorizontalDrag = { _, dragAmount -> horizontalDrag += dragAmount },
+                    onDragEnd = {
+                        if (horizontalDrag > 80f) onHome()
+                        horizontalDrag = 0f
+                    },
+                    onDragCancel = { horizontalDrag = 0f }
+                )
+            }
     ) {
 
         AssetImage(

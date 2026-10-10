@@ -730,8 +730,8 @@ fun MainAndFavorites() {
     ) { favoritesPage ->
         if (favoritesPage) {
             FavoritesScreen(
-                onHome = {
-                    swipeDirection = 1f
+                onHome = { direction ->
+                    swipeDirection = direction
                     showFavorites = false
                 }
             )
@@ -1078,7 +1078,7 @@ fun HomeScreen(
 
 @Composable
 fun FavoritesScreen(
-    onHome: () -> Unit
+    onHome: (Float) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -1166,7 +1166,9 @@ fun FavoritesScreen(
                     onDragStart = { horizontalDrag = 0f },
                     onHorizontalDrag = { _, dragAmount -> horizontalDrag += dragAmount },
                     onDragEnd = {
-                        if (horizontalDrag > 80f) onHome()
+                        if (kotlin.math.abs(horizontalDrag) > 80f) {
+                            onHome(if (horizontalDrag > 0f) 1f else -1f)
+                        }
                         horizontalDrag = 0f
                     },
                     onDragCancel = { horizontalDrag = 0f }

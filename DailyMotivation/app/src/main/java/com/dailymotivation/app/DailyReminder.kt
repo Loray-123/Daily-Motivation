@@ -16,6 +16,7 @@ import java.util.Calendar
 
 object DailyReminderScheduler {
     private const val REQUEST_CODE = 8040
+    private const val TEST_REQUEST_CODE = 8042
     private const val CHANNEL_ID = "daily_quote_reminder"
 
     fun schedule(context: Context) {
@@ -28,8 +29,8 @@ object DailyReminderScheduler {
         )
 
         val nextReminder = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 15)
-            set(Calendar.MINUTE, 55)
+            set(Calendar.HOUR_OF_DAY, 8)
+            set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
             if (timeInMillis <= System.currentTimeMillis()) {
@@ -41,6 +42,22 @@ object DailyReminderScheduler {
             AlarmManager.RTC_WAKEUP,
             nextReminder.timeInMillis,
             alarmIntent
+        )
+    }
+
+    fun scheduleTest(context: Context) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val testIntent = PendingIntent.getBroadcast(
+            context,
+            TEST_REQUEST_CODE,
+            Intent(context, DailyReminderReceiver::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        alarmManager.setAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            System.currentTimeMillis() + 60_000L,
+            testIntent
         )
     }
 

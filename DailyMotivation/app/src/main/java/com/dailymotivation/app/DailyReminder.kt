@@ -17,7 +17,7 @@ import java.util.Calendar
 object DailyReminderScheduler {
     private const val REQUEST_CODE = 8040
     private const val TEST_REQUEST_CODE = 8042
-    private const val CHANNEL_ID = "daily_quote_reminder"
+    private const val CHANNEL_ID = "daily_quote_reminder_alerts_v2"
 
     fun schedule(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -88,7 +88,8 @@ object DailyReminderScheduler {
                 NotificationCompat.BigTextStyle()
                     .bigText("Take a moment for yourself. Open Daily Motivation and read today's inspiring quote.")
             )
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
             .setContentIntent(openAppIntent)
             .setAutoCancel(true)
             .build()
@@ -101,9 +102,9 @@ object DailyReminderScheduler {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 "Daily quote reminder",
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_HIGH
             ).apply {
-                description = "A gentle reminder to open Daily Motivation each morning."
+                description = "A morning reminder to open Daily Motivation, with sound and vibration."
             }
             val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(channel)

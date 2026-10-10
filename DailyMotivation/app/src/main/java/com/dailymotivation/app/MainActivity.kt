@@ -717,7 +717,8 @@ fun MainAndFavorites() {
 
     androidx.compose.foundation.pager.HorizontalPager(
         state = pagerState,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        userScrollEnabled = true
     ) { page ->
 
         when (page) {

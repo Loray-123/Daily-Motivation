@@ -654,7 +654,6 @@ class MainActivity : ComponentActivity() {
 fun DailyMotivationApp() {
 
     val context = LocalContext.current
-    val shareScope = rememberCoroutineScope()
 
     val today = rememberCurrentDate()
 
@@ -913,6 +912,7 @@ fun HomeScreen(
 ) {
 
     val context = LocalContext.current
+    val shareScope = rememberCoroutineScope()
 
     val today = rememberCurrentDate()
 

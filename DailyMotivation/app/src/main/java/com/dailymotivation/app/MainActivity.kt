@@ -611,13 +611,13 @@ fun ShareIconButton(
     Box(
         modifier = Modifier
             .width(70.dp)
-            .height(87.dp)
+            .height(55.dp)
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = onClick
             ),
-        contentAlignment = Alignment.BottomCenter
+        contentAlignment = Alignment.Center
     ) {
         Box(
             modifier = Modifier
@@ -1202,10 +1202,11 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
-                            bottom = 35.dp
+                            horizontal = 24.dp,
+                            bottom = 12.dp
                         ),
                     horizontalArrangement =
-                        Arrangement.SpaceEvenly,
+                        Arrangement.SpaceBetween,
                     verticalAlignment =
                         Alignment.CenterVertically
                 ) {

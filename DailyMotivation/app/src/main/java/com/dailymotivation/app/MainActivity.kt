@@ -1191,10 +1191,10 @@ fun HomeScreen(
                         text = "Swipe right to see your favorites  →",
                         fontSize = 12.sp,
                         color = Color.White.copy(alpha = 0.85f),
-                        textAlign = TextAlign.Center,
+                        textAlign = TextAlign.End,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 4.dp, bottom = 8.dp)
+                            .padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 8.dp)
                     )
                 }
 

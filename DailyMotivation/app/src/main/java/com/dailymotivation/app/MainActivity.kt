@@ -29,7 +29,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Canvas as ComposeCanvas
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -648,7 +648,7 @@ fun ShareIconButton(
             ),
         contentAlignment = Alignment.Center
     ) {
-        Canvas(
+        ComposeCanvas(
             modifier = Modifier
                 .width(28.dp)
                 .height(28.dp)

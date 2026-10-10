@@ -28,8 +28,8 @@ object DailyReminderScheduler {
         )
 
         val nextReminder = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 8)
-            set(Calendar.MINUTE, 0)
+            set(Calendar.HOUR_OF_DAY, 15)
+            set(Calendar.MINUTE, 47)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
             if (timeInMillis <= System.currentTimeMillis()) {

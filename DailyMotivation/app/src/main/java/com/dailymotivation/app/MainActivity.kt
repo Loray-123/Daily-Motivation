@@ -713,6 +713,9 @@ fun MainAndFavorites() {
     var swipeDirection by remember { mutableStateOf(-1f) }
 
     AnimatedContent(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
         targetState = showFavorites,
         transitionSpec = {
             val enteringFrom = if (swipeDirection > 0f) -1 else 1

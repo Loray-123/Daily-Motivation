@@ -385,7 +385,7 @@ fun FavoriteHeartButton(
             label = "favoriteHint"
         ) { clicked ->
 
-            if (clicked) {
+            if (clicked || isSaved) {
 
                 Spacer(
                     modifier = Modifier

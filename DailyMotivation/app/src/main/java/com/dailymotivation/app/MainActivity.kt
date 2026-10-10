@@ -395,33 +395,29 @@ fun FavoriteHeartButton(
 
             } else {
 
-                Row(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(32.dp),
-                    verticalAlignment = Alignment.Bottom,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Bottom
                 ) {
-
-                    Text(
-                        text = "↶",
-                        fontSize = 25.sp,
-                        color = Color.White.copy(alpha = 0.95f),
-                        modifier = Modifier.graphicsLayer {
-                            rotationZ = -20f
-                        }
-                    )
-
-                    Spacer(
-                        modifier = Modifier.width(6.dp)
-                    )
 
                     Text(
                         text = "Click to save",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.White.copy(alpha = 0.95f),
-                        textAlign = TextAlign.Start
+                        textAlign = TextAlign.Center
+                    )
+
+                    Text(
+                        text = "↶",
+                        fontSize = 25.sp,
+                        color = Color.White.copy(alpha = 0.95f),
+                        modifier = Modifier.graphicsLayer {
+                            rotationZ = -90f
+                        }
                     )
                 }
             }

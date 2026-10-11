@@ -933,31 +933,33 @@ fun FavoriteHeartButton(
                         )
                 )
 
-                Text(
-                    text =
-                        if (isSaved) "♥" else "♡",
-                    fontSize = 34.sp,
-                    color = Color.White,
+                Box(
                     modifier = Modifier
+                        .width(55.dp)
+                        .height(55.dp)
                         .scale(heartScale.value)
                         .clickable(
                             indication = null,
-                            interactionSource =
-                                remember {
-                                    MutableInteractionSource()
-                                }
+                            interactionSource = remember {
+                                MutableInteractionSource()
+                            }
                         ) {
-
                             if (!isSaved) {
                                 isAnimating = true
                             }
-
                             onClick()
-                        }
-                        .padding(8.dp),
-                    textAlign =
-                        TextAlign.Center
-                )
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = if (isSaved) "♥" else "♡",
+                        fontSize = 34.sp,
+                        lineHeight = 34.sp,
+                        color = Color.White,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
 
             Spacer(
@@ -1631,8 +1633,8 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
-                            start = 4.dp,
-                            end = 4.dp,
+                            start = 0.dp,
+                            end = 0.dp,
                             bottom = 38.dp
                         ),
                     horizontalArrangement =

@@ -1196,6 +1196,7 @@ fun IntroScreen() {
                 textAlign =
                     TextAlign.Center
             )
+        }
 }
 
 

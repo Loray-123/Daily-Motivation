@@ -1602,7 +1602,7 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Swipe right to see your favorites",
+                        text = "Swipe right to see your favorites →",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.White,

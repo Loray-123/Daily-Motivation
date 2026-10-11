@@ -1196,8 +1196,6 @@ fun IntroScreen() {
                 textAlign =
                     TextAlign.Center
             )
-        }
-    }
 }
 
 
@@ -1212,9 +1210,7 @@ fun MainAndFavorites() {
     var swipeDirection by remember { mutableStateOf(-1f) }
 
     AnimatedContent(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black),
+        modifier = Modifier.fillMaxSize(),
         targetState = showFavorites,
         transitionSpec = {
             val enteringFrom = if (swipeDirection > 0f) -1 else 1

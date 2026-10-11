@@ -1874,10 +1874,14 @@ fun FavoritesScreen(
                                     letterSpacing = 1.5.sp,
                                     fontWeight =
                                         FontWeight.Medium,
-                                    color =
-                                        Color.White.copy(
-                                            alpha = 0.94f
+                                    color = Color.White.copy(alpha = 0.94f),
+                                    style = androidx.compose.ui.text.TextStyle(
+                                        shadow = androidx.compose.ui.graphics.Shadow(
+                                            color = Color.Black.copy(alpha = 0.80f),
+                                            offset = Offset(0f, 1.5f),
+                                            blurRadius = 4f
                                         )
+                                    )
                                 )
                             }
 

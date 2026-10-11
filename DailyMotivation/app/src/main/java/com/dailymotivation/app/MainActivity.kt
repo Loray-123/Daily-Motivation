@@ -1430,18 +1430,6 @@ fun HomeScreen(
             quoteIndex.toString()
         )
 
-    val showFavoritesSwipeHint = remember {
-        !preferences.getBoolean("has_seen_favorites_swipe_hint_v3", false)
-    }
-
-    LaunchedEffect(Unit) {
-        if (showFavoritesSwipeHint) {
-            preferences.edit()
-                .putBoolean("has_seen_favorites_swipe_hint_v3", true)
-                .apply()
-        }
-    }
-
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.Transparent
@@ -1603,16 +1591,39 @@ fun HomeScreen(
                     )
                 }
 
-                if (showFavoritesSwipeHint) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp, bottom = 12.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(
-                        text = "Swipe right to see your favorites  →",
+                        text = "Swipe right to see your favorites",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.White,
-                        textAlign = TextAlign.End,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 12.dp)
+                        style = androidx.compose.ui.text.TextStyle(
+                            shadow = androidx.compose.ui.graphics.Shadow(
+                                color = Color.Black.copy(alpha = 0.85f),
+                                offset = Offset(0f, 2f),
+                                blurRadius = 5f
+                            )
+                        )
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "→",
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.White,
+                        style = androidx.compose.ui.text.TextStyle(
+                            shadow = androidx.compose.ui.graphics.Shadow(
+                                color = Color.Black.copy(alpha = 0.85f),
+                                offset = Offset(0f, 2f),
+                                blurRadius = 5f
+                            )
+                        )
                     )
                 }
 

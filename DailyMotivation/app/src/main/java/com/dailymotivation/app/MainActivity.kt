@@ -1396,10 +1396,6 @@ fun HomeScreen(
                                     val sendIntent = Intent(Intent.ACTION_SEND).apply {
                                         type = "image/png"
                                         putExtra(Intent.EXTRA_STREAM, shareUri)
-                                        putExtra(
-                                            Intent.EXTRA_TEXT,
-                                            "“${quote.text}”\n\n— ${quote.author}\n\nShared from Daily Motivation"
-                                        )
                                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                                         clipData = android.content.ClipData.newUri(
                                             context.contentResolver,
@@ -1409,17 +1405,6 @@ fun HomeScreen(
                                     }
                                     context.startActivity(
                                         Intent.createChooser(sendIntent, "Share Quote Card")
-                                    )
-                                } else {
-                                    val fallbackIntent = Intent(Intent.ACTION_SEND).apply {
-                                        type = "text/plain"
-                                        putExtra(
-                                            Intent.EXTRA_TEXT,
-                                            "“${quote.text}”\n\n— ${quote.author}\n\nDaily Motivation"
-                                        )
-                                    }
-                                    context.startActivity(
-                                        Intent.createChooser(fallbackIntent, "Share Motivation")
                                     )
                                 }
                             }

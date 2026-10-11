@@ -1081,12 +1081,6 @@ fun DailyMotivationApp() {
     val backgroundImage =
         backgroundImages[backgroundIndex]
 
-    val dailyQuoteIndex =
-        Math.floorMod(
-            today.toEpochDay(),
-            quotes.size.toLong()
-        ).toInt()
-
     var showIntro by remember {
         mutableStateOf(true)
     }
@@ -1094,33 +1088,17 @@ fun DailyMotivationApp() {
     AnimatedContent(
         targetState = showIntro,
         transitionSpec = {
-            (
-                fadeIn(
-                    animationSpec = tween(
-                        durationMillis = 950,
-                        easing = LinearOutSlowInEasing
-                    )
-                ) + androidx.compose.animation.scaleIn(
-                    initialScale = 0.985f,
-                    animationSpec = tween(
-                        durationMillis = 950,
-                        easing = LinearOutSlowInEasing
-                    )
+
+            fadeIn(
+                animationSpec = tween(
+                    durationMillis = 900
                 )
-            ) togetherWith (
-                fadeOut(
-                    animationSpec = tween(
-                        durationMillis = 800,
-                        easing = LinearOutSlowInEasing
+            ) togetherWith
+                    fadeOut(
+                        animationSpec = tween(
+                            durationMillis = 900
+                        )
                     )
-                ) + androidx.compose.animation.scaleOut(
-                    targetScale = 1.01f,
-                    animationSpec = tween(
-                        durationMillis = 800,
-                        easing = LinearOutSlowInEasing
-                    )
-                )
-            )
         },
         label = "introTransition"
     ) { introVisible ->
@@ -1128,20 +1106,19 @@ fun DailyMotivationApp() {
         if (introVisible) {
 
             IntroScreen(
-                backgroundImage = backgroundImage,
-                quote = quotes[dailyQuoteIndex]
+                backgroundImage = backgroundImage
             )
 
             LaunchedEffect(Unit) {
 
-                delay(1900L)
+                delay(2200L)
 
                 showIntro = false
             }
 
         } else {
 
-            MainAndFavorites(quoteIndex = dailyQuoteIndex)
+            MainAndFavorites()
         }
     }
 }
@@ -1153,8 +1130,7 @@ fun DailyMotivationApp() {
 
 @Composable
 fun IntroScreen(
-    backgroundImage: String,
-    quote: Quote
+    backgroundImage: String
 ) {
 
     var targetScale by remember {
@@ -1162,13 +1138,13 @@ fun IntroScreen(
     }
 
     LaunchedEffect(Unit) {
-        targetScale = 1.08f
+        targetScale = 1.20f
     }
 
     val scale by animateFloatAsState(
         targetValue = targetScale,
         animationSpec = tween(
-            durationMillis = 2600,
+            durationMillis = 2200,
             easing = LinearOutSlowInEasing
         ),
         label = "introZoom"
@@ -1253,32 +1229,17 @@ fun IntroScreen(
             )
 
             Text(
-                text = "“${quote.text}”",
-                fontSize = 21.sp,
-                lineHeight = 30.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                style = androidx.compose.ui.text.TextStyle(
-                    shadow = androidx.compose.ui.graphics.Shadow(
-                        color = Color.Black.copy(alpha = 0.75f),
-                        offset = Offset(0f, 2f),
-                        blurRadius = 5f
-                    )
-                )
-            )
-
-            Spacer(
-                modifier = Modifier.height(12.dp)
-            )
-
-            Text(
-                text = "— ${quote.author.uppercase()}",
-                fontSize = 11.sp,
-                letterSpacing = 1.5.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.White.copy(alpha = 0.90f),
-                textAlign = TextAlign.Center
+                text =
+                    "A little inspiration for every day.",
+                fontSize = 15.sp,
+                fontWeight =
+                    FontWeight.Normal,
+                color =
+                    Color.White.copy(
+                        alpha = 0.90f
+                    ),
+                textAlign =
+                    TextAlign.Center
             )
         }
     }
@@ -1290,7 +1251,7 @@ fun IntroScreen(
 // ------------------------------------------------------------
 
 @Composable
-fun MainAndFavorites(quoteIndex: Int) {
+fun MainAndFavorites() {
 
     var showFavorites by remember { mutableStateOf(false) }
     var swipeDirection by remember { mutableStateOf(-1f) }
@@ -1307,10 +1268,10 @@ fun MainAndFavorites(quoteIndex: Int) {
                 animationSpec = tween(280),
                 initialOffsetX = { fullWidth -> fullWidth * enteringFrom }
             ) + fadeIn(animationSpec = tween(180))) togetherWith
-                (androidx.compose.animation.slideOutHorizontally(
-                    animationSpec = tween(280),
-                    targetOffsetX = { fullWidth -> fullWidth * exitingTo }
-                ) + fadeOut(animationSpec = tween(180)))
+                    (androidx.compose.animation.slideOutHorizontally(
+                        animationSpec = tween(280),
+                        targetOffsetX = { fullWidth -> fullWidth * exitingTo }
+                    ) + fadeOut(animationSpec = tween(180)))
         },
         label = "home_favorites_page"
     ) { favoritesPage ->
@@ -1323,7 +1284,6 @@ fun MainAndFavorites(quoteIndex: Int) {
             )
         } else {
             HomeScreen(
-                quoteIndex = quoteIndex,
                 onFavorites = { direction ->
                     swipeDirection = direction
                     showFavorites = true
@@ -1340,7 +1300,6 @@ fun MainAndFavorites(quoteIndex: Int) {
 
 @Composable
 fun HomeScreen(
-    quoteIndex: Int,
     onFavorites: (Float) -> Unit
 ) {
 
@@ -1371,6 +1330,12 @@ fun HomeScreen(
 
         return
     }
+
+    val quoteIndex =
+        Math.floorMod(
+            today.toEpochDay(),
+            quotes.size.toLong()
+        ).toInt()
 
     val quote = quotes[quoteIndex]
 

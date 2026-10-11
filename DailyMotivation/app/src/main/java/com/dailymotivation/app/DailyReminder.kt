@@ -28,9 +28,18 @@ object DailyReminderScheduler {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        val preferences = context.getSharedPreferences("daily_motivation", Context.MODE_PRIVATE)
+        if (!preferences.getBoolean("reminder_enabled", true)) {
+            alarmManager.cancel(alarmIntent)
+            alarmIntent.cancel()
+            return
+        }
+
+        val reminderHour = preferences.getInt("reminder_hour", 8).coerceIn(0, 23)
+        val reminderMinute = preferences.getInt("reminder_minute", 0).coerceIn(0, 59)
         val nextReminder = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 8)
-            set(Calendar.MINUTE, 0)
+            set(Calendar.HOUR_OF_DAY, reminderHour)
+            set(Calendar.MINUTE, reminderMinute)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
             if (timeInMillis <= System.currentTimeMillis()) {
@@ -43,6 +52,18 @@ object DailyReminderScheduler {
             nextReminder.timeInMillis,
             alarmIntent
         )
+    }
+
+    fun cancel(context: Context) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmIntent = PendingIntent.getBroadcast(
+            context,
+            REQUEST_CODE,
+            Intent(context, DailyReminderReceiver::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.cancel(alarmIntent)
+        alarmIntent.cancel()
     }
 
     fun cancelTest(context: Context) {

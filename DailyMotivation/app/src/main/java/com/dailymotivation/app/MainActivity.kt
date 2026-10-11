@@ -1085,35 +1085,45 @@ fun DailyMotivationApp() {
         mutableStateOf(true)
     }
 
-    AnimatedContent(
-        targetState = showIntro,
-        transitionSpec = {
-            fadeIn(
-                animationSpec = tween(
-                    durationMillis = 550,
-                    delayMillis = 350
-                )
-            ) togetherWith
-                fadeOut(
+    Box(modifier = Modifier.fillMaxSize()) {
+        AssetImage(
+            fileName = backgroundImage,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.36f))
+        )
+
+        AnimatedContent(
+            targetState = showIntro,
+            transitionSpec = {
+                fadeIn(
                     animationSpec = tween(
-                        durationMillis = 350
+                        durationMillis = 650,
+                        delayMillis = 350
                     )
-                )
-        },
-        label = "introTextTransition"
-    ) { introVisible ->
+                ) togetherWith
+                    fadeOut(
+                        animationSpec = tween(
+                            durationMillis = 350
+                        )
+                    )
+            },
+            label = "introTextTransition"
+        ) { introVisible ->
+            if (introVisible) {
+                IntroScreen()
 
-        if (introVisible) {
-            IntroScreen(
-                backgroundImage = backgroundImage
-            )
-
-            LaunchedEffect(Unit) {
-                delay(2200L)
-                showIntro = false
+                LaunchedEffect(Unit) {
+                    delay(2200L)
+                    showIntro = false
+                }
+            } else {
+                MainAndFavorites()
             }
-        } else {
-            MainAndFavorites()
         }
     }
 }
@@ -1124,58 +1134,8 @@ fun DailyMotivationApp() {
 // ------------------------------------------------------------
 
 @Composable
-fun IntroScreen(
-    backgroundImage: String
-) {
-
-    var targetScale by remember {
-        mutableStateOf(1.0f)
-    }
-
-    LaunchedEffect(Unit) {
-        targetScale = 1.20f
-    }
-
-    val scale by animateFloatAsState(
-        targetValue = targetScale,
-        animationSpec = tween(
-            durationMillis = 2200,
-            easing = LinearOutSlowInEasing
-        ),
-        label = "introZoom"
-    )
-
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .graphicsLayer {
-                    scaleX = scale
-                    scaleY = scale
-                }
-        ) {
-
-            AssetImage(
-                fileName = backgroundImage,
-                modifier =
-                    Modifier.fillMaxSize()
-            )
-        }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Color.Black.copy(
-                        alpha = 0.42f
-                    )
-                )
-        )
-
-        Column(
+fun IntroScreen() {
+    Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(30.dp),
@@ -1377,9 +1337,8 @@ fun HomeScreen(
     }
 
     Surface(
-        modifier =
-            Modifier.fillMaxSize(),
-        color = Color.Black
+        modifier = Modifier.fillMaxSize(),
+        color = Color.Transparent
     ) {
 
         Box(
@@ -1406,22 +1365,6 @@ fun HomeScreen(
                     )
                 }
         ) {
-
-            AssetImage(
-                fileName = backgroundImage,
-                modifier =
-                    Modifier.fillMaxSize()
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Color.Black.copy(
-                            alpha = 0.30f
-                        )
-                    )
-            )
 
             Column(
                 modifier = Modifier
@@ -1758,22 +1701,6 @@ fun FavoritesScreen(
                 )
             }
     ) {
-
-        AssetImage(
-            fileName = backgroundImage,
-            modifier =
-                Modifier.fillMaxSize()
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Color.Black.copy(
-                        alpha = 0.30f
-                    )
-                )
-        )
 
         Column(
             modifier =

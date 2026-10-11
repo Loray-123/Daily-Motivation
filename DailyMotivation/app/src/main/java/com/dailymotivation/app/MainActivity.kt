@@ -375,12 +375,20 @@ fun createQuoteShareImage(
     canvas.drawText("— ${quote.author.uppercase()} —", width / 2f, textY + 58f, authorPaint)
 
     val footerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = AndroidColor.argb(230, 255, 255, 255)
+        color = AndroidColor.argb(225, 255, 255, 255)
         textAlign = Paint.Align.CENTER
-        textSize = 42f
+        textSize = 34f
         typeface = Typeface.create("sans-serif", Typeface.NORMAL)
     }
-    canvas.drawText("A little inspiration for every day.", width / 2f, 1265f, footerPaint)
+    canvas.drawText("A little inspiration for every day.", width / 2f, 1220f, footerPaint)
+
+    val appCreditPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = AndroidColor.argb(200, 255, 255, 255)
+        textAlign = Paint.Align.CENTER
+        textSize = 28f
+        typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+    }
+    canvas.drawText("Shared from Daily Motivation", width / 2f, 1300f, appCreditPaint)
 
     val shareDirectory = java.io.File(context.cacheDir, "shared_quotes")
     if (!shareDirectory.exists()) shareDirectory.mkdirs()
@@ -1265,6 +1273,10 @@ fun HomeScreen(
                                     val sendIntent = Intent(Intent.ACTION_SEND).apply {
                                         type = "image/png"
                                         putExtra(Intent.EXTRA_STREAM, shareUri)
+                                        putExtra(
+                                            Intent.EXTRA_TEXT,
+                                            "“${quote.text}”\n\n— ${quote.author}\n\nShared from Daily Motivation"
+                                        )
                                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                                         clipData = android.content.ClipData.newUri(
                                             context.contentResolver,

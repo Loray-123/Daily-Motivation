@@ -1614,20 +1614,6 @@ fun HomeScreen(
                             )
                         )
                     )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = "→",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.White,
-                        style = androidx.compose.ui.text.TextStyle(
-                            shadow = androidx.compose.ui.graphics.Shadow(
-                                color = Color.Black.copy(alpha = 0.85f),
-                                offset = Offset(0f, 2f),
-                                blurRadius = 5f
-                            )
-                        )
-                    )
                 }
 
                 Row(

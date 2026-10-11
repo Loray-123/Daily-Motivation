@@ -1297,7 +1297,14 @@ fun HomeScreen(
                             FontWeight.Medium,
                         textAlign =
                             TextAlign.Center,
-                        color = Color.White
+                        color = Color.White,
+                        style = androidx.compose.ui.text.TextStyle(
+                            shadow = androidx.compose.ui.graphics.Shadow(
+                                color = Color.Black.copy(alpha = 0.85f),
+                                offset = Offset(0f, 2f),
+                                blurRadius = 5f
+                            )
+                        )
                     )
 
                     Spacer(
@@ -1315,7 +1322,14 @@ fun HomeScreen(
                         color =
                             Color.White.copy(
                                 alpha = 0.94f
+                            ),
+                        style = androidx.compose.ui.text.TextStyle(
+                            shadow = androidx.compose.ui.graphics.Shadow(
+                                color = Color.Black.copy(alpha = 0.80f),
+                                offset = Offset(0f, 1.5f),
+                                blurRadius = 4f
                             )
+                        )
                     )
                 }
 

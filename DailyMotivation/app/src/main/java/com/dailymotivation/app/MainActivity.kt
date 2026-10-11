@@ -1209,7 +1209,7 @@ fun DailyMotivationApp() {
                 IntroScreen()
 
                 LaunchedEffect(Unit) {
-                    delay(2200L)
+                    delay(900L)
                     showIntro = false
                 }
             } else {

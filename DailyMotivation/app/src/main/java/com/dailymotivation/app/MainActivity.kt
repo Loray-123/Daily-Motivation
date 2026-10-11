@@ -1614,19 +1614,25 @@ fun HomeScreen(
                         )
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "→",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.White,
-                        style = androidx.compose.ui.text.TextStyle(
-                            shadow = androidx.compose.ui.graphics.Shadow(
-                                color = Color.Black.copy(alpha = 0.85f),
-                                offset = Offset(0f, 2f),
-                                blurRadius = 5f
+                    Box(
+                        modifier = Modifier
+                            .size(width = 25.dp, height = 20.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "➜",
+                            fontSize = 19.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            style = androidx.compose.ui.text.TextStyle(
+                                shadow = androidx.compose.ui.graphics.Shadow(
+                                    color = Color.Black.copy(alpha = 0.85f),
+                                    offset = Offset(0f, 2f),
+                                    blurRadius = 5f
+                                )
                             )
                         )
-                    )
+                    }
                 }
 
                 Row(

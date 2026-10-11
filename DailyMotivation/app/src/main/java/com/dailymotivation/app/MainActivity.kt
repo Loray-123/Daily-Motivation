@@ -804,7 +804,14 @@ fun TextButton(
         fontSize = fontSize,
         fontWeight = FontWeight.Medium,
         color = Color.White,
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
+        style = androidx.compose.ui.text.TextStyle(
+            shadow = androidx.compose.ui.graphics.Shadow(
+                color = Color.Black.copy(alpha = 0.82f),
+                offset = Offset(0f, 2f),
+                blurRadius = 5f
+            )
+        )
     )
 }
 
@@ -1796,6 +1803,14 @@ fun FavoritesScreen(
 
     val context = LocalContext.current
 
+    val favoritesShadowStyle = androidx.compose.ui.text.TextStyle(
+        shadow = androidx.compose.ui.graphics.Shadow(
+            color = Color.Black.copy(alpha = 0.82f),
+            offset = Offset(0f, 2f),
+            blurRadius = 5f
+        )
+    )
+
     val today = rememberCurrentDate()
 
     val backgroundImages =
@@ -1812,6 +1827,7 @@ fun FavoritesScreen(
         ) {
 
             Text(
+                    style = favoritesShadowStyle,
                 text =
                     "No background images found.",
                 color = Color.White
@@ -1905,6 +1921,7 @@ fun FavoritesScreen(
             // Swipe right to return to Home.
 
             Text(
+                    style = favoritesShadowStyle,
                 text = "My Favorites",
                 fontSize = 49.sp,
                 fontFamily =
@@ -1933,6 +1950,7 @@ fun FavoritesScreen(
                 )
 
                 Text(
+                    style = favoritesShadowStyle,
                     text = "♡",
                     fontSize = 29.sp,
                     color = Color.White,
@@ -1966,6 +1984,7 @@ fun FavoritesScreen(
                 ) {
 
                     Text(
+                    style = favoritesShadowStyle,
                         text = "♡",
                         fontSize = 60.sp,
                         color = Color.White
@@ -1977,6 +1996,7 @@ fun FavoritesScreen(
                     )
 
                     Text(
+                    style = favoritesShadowStyle,
                         text =
                             "No saved quotes yet.",
                         fontSize = 20.sp,
@@ -1991,6 +2011,7 @@ fun FavoritesScreen(
                     )
 
                     Text(
+                    style = favoritesShadowStyle,
                         text =
                             "Save a quote and it will appear here.",
                         fontSize = 14.sp,
@@ -2041,6 +2062,7 @@ fun FavoritesScreen(
                             ) {
 
                                 Text(
+                    style = favoritesShadowStyle,
                                     text =
                                         "“${favoriteQuote.text}”",
                                     fontSize = 20.sp,
@@ -2058,6 +2080,7 @@ fun FavoritesScreen(
                                 )
 
                                 Text(
+                    style = favoritesShadowStyle,
                                     text =
                                         "— ${favoriteQuote.author.uppercase()}",
                                     fontSize = 11.sp,
@@ -2102,6 +2125,7 @@ fun FavoritesScreen(
             title = {
 
                 Text(
+                    style = favoritesShadowStyle,
                     text =
                         "Remove favorite?"
                 )
@@ -2109,6 +2133,7 @@ fun FavoritesScreen(
             text = {
 
                 Text(
+                    style = favoritesShadowStyle,
                     text =
                         "Are you sure you want to remove this quote from your favorites?"
                 )
@@ -2141,6 +2166,7 @@ fun FavoritesScreen(
                 ) {
 
                     Text(
+                    style = favoritesShadowStyle,
                         text = "Remove"
                     )
                 }
@@ -2155,6 +2181,7 @@ fun FavoritesScreen(
                 ) {
 
                     Text(
+                    style = favoritesShadowStyle,
                         text = "Cancel"
                     )
                 }

@@ -1122,7 +1122,13 @@ fun DailyMotivationApp() {
         if (introVisible) {
 
             IntroScreen(
-                backgroundImage = backgroundImage
+                backgroundImage = backgroundImage,
+                quote = quotes[
+                    Math.floorMod(
+                        today.toEpochDay(),
+                        quotes.size.toLong()
+                    ).toInt()
+                ]
             )
 
             LaunchedEffect(Unit) {
@@ -1146,7 +1152,8 @@ fun DailyMotivationApp() {
 
 @Composable
 fun IntroScreen(
-    backgroundImage: String
+    backgroundImage: String,
+    quote: Quote
 ) {
 
     var targetScale by remember {
@@ -1245,17 +1252,32 @@ fun IntroScreen(
             )
 
             Text(
-                text =
-                    "A little inspiration for every day.",
-                fontSize = 15.sp,
-                fontWeight =
-                    FontWeight.Normal,
-                color =
-                    Color.White.copy(
-                        alpha = 0.90f
-                    ),
-                textAlign =
-                    TextAlign.Center
+                text = "“${quote.text}”",
+                fontSize = 21.sp,
+                lineHeight = 30.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                style = androidx.compose.ui.text.TextStyle(
+                    shadow = androidx.compose.ui.graphics.Shadow(
+                        color = Color.Black.copy(alpha = 0.75f),
+                        offset = Offset(0f, 2f),
+                        blurRadius = 5f
+                    )
+                )
+            )
+
+            Spacer(
+                modifier = Modifier.height(12.dp)
+            )
+
+            Text(
+                text = "— ${quote.author.uppercase()}",
+                fontSize = 11.sp,
+                letterSpacing = 1.5.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.White.copy(alpha = 0.90f),
+                textAlign = TextAlign.Center
             )
         }
     }

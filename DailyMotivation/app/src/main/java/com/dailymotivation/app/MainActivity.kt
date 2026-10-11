@@ -1081,6 +1081,12 @@ fun DailyMotivationApp() {
     val backgroundImage =
         backgroundImages[backgroundIndex]
 
+    val dailyQuoteIndex =
+        Math.floorMod(
+            today.toEpochDay(),
+            quotes.size.toLong()
+        ).toInt()
+
     var showIntro by remember {
         mutableStateOf(true)
     }
@@ -1123,12 +1129,7 @@ fun DailyMotivationApp() {
 
             IntroScreen(
                 backgroundImage = backgroundImage,
-                quote = quotes[
-                    Math.floorMod(
-                        today.toEpochDay(),
-                        quotes.size.toLong()
-                    ).toInt()
-                ]
+                quote = quotes[dailyQuoteIndex]
             )
 
             LaunchedEffect(Unit) {
@@ -1140,7 +1141,7 @@ fun DailyMotivationApp() {
 
         } else {
 
-            MainAndFavorites()
+            MainAndFavorites(quoteIndex = dailyQuoteIndex)
         }
     }
 }
@@ -1289,7 +1290,7 @@ fun IntroScreen(
 // ------------------------------------------------------------
 
 @Composable
-fun MainAndFavorites() {
+fun MainAndFavorites(quoteIndex: Int) {
 
     var showFavorites by remember { mutableStateOf(false) }
     var swipeDirection by remember { mutableStateOf(-1f) }
@@ -1322,6 +1323,7 @@ fun MainAndFavorites() {
             )
         } else {
             HomeScreen(
+                quoteIndex = quoteIndex,
                 onFavorites = { direction ->
                     swipeDirection = direction
                     showFavorites = true
@@ -1338,6 +1340,7 @@ fun MainAndFavorites() {
 
 @Composable
 fun HomeScreen(
+    quoteIndex: Int,
     onFavorites: (Float) -> Unit
 ) {
 
@@ -1368,12 +1371,6 @@ fun HomeScreen(
 
         return
     }
-
-    val quoteIndex =
-        Math.floorMod(
-            today.toEpochDay(),
-            quotes.size.toLong()
-        ).toInt()
 
     val quote = quotes[quoteIndex]
 

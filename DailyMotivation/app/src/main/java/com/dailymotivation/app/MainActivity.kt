@@ -982,41 +982,74 @@ fun ReminderIconButton(
     ) {
         ComposeCanvas(
             modifier = Modifier
-                .width(27.dp)
+                .width(29.dp)
                 .height(29.dp)
         ) {
-            val line = 1.8.dp.toPx()
-            val color = Color.White.copy(alpha = 0.92f)
-            drawArc(
+            val line = 1.7.dp.toPx()
+            val color = Color.White.copy(alpha = 0.94f)
+            val pageLeft = size.width * 0.08f
+            val pageTop = size.height * 0.17f
+            val pageWidth = size.width * 0.72f
+            val pageHeight = size.height * 0.72f
+
+            // Calendar page
+            drawRoundRect(
                 color = color,
-                startAngle = 200f,
-                sweepAngle = 140f,
-                useCenter = false,
-                topLeft = Offset(size.width * 0.18f, size.height * 0.08f),
-                size = androidx.compose.ui.geometry.Size(size.width * 0.64f, size.height * 0.72f),
+                topLeft = Offset(pageLeft, pageTop),
+                size = androidx.compose.ui.geometry.Size(pageWidth, pageHeight),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(2.5.dp.toPx()),
+                style = androidx.compose.ui.graphics.drawscope.Stroke(width = line)
+            )
+
+            // Calendar header and binding rings
+            drawLine(
+                color,
+                Offset(pageLeft, size.height * 0.39f),
+                Offset(pageLeft + pageWidth, size.height * 0.39f),
+                strokeWidth = line
+            )
+            drawLine(
+                color,
+                Offset(size.width * 0.27f, size.height * 0.08f),
+                Offset(size.width * 0.27f, size.height * 0.28f),
+                strokeWidth = line
+            )
+            drawLine(
+                color,
+                Offset(size.width * 0.60f, size.height * 0.08f),
+                Offset(size.width * 0.60f, size.height * 0.28f),
+                strokeWidth = line
+            )
+
+            // Small calendar-day marks
+            drawCircle(color, radius = line * 0.8f, center = Offset(size.width * 0.25f, size.height * 0.53f))
+            drawCircle(color, radius = line * 0.8f, center = Offset(size.width * 0.48f, size.height * 0.53f))
+            drawCircle(color, radius = line * 0.8f, center = Offset(size.width * 0.25f, size.height * 0.69f))
+
+            // Clock overlay to make the daily reminder meaning clear
+            val clockCenter = Offset(size.width * 0.72f, size.height * 0.73f)
+            val clockRadius = 5.dp.toPx()
+            drawCircle(
+                color = color,
+                radius = clockRadius,
+                center = clockCenter,
                 style = androidx.compose.ui.graphics.drawscope.Stroke(width = line)
             )
             drawLine(
                 color,
-                Offset(size.width * 0.18f, size.height * 0.70f),
-                Offset(size.width * 0.82f, size.height * 0.70f),
+                clockCenter,
+                Offset(clockCenter.x, clockCenter.y - clockRadius * 0.52f),
                 strokeWidth = line
             )
             drawLine(
                 color,
-                Offset(size.width * 0.39f, size.height * 0.82f),
-                Offset(size.width * 0.61f, size.height * 0.82f),
+                clockCenter,
+                Offset(clockCenter.x + clockRadius * 0.42f, clockCenter.y + clockRadius * 0.20f),
                 strokeWidth = line
-            )
-            drawCircle(
-                color,
-                radius = line * 1.2f,
-                center = Offset(size.width * 0.50f, size.height * 0.88f)
             )
         }
     }
 }
-
 // ------------------------------------------------------------
 // SHARE ICON BUTTON
 // ------------------------------------------------------------

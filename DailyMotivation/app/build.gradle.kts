@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.dailymotivation.app"
+    namespace = "com.brightdays.dailymotivation"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.dailymotivation.app"
+        applicationId = "com.brightdays.dailymotivation"
         minSdk = 24
         targetSdk = 37
         versionCode = 1

@@ -966,7 +966,6 @@ fun FavoriteHeartButton(
 // ------------------------------------------------------------
 
 @Composable
-@Composable
 fun ReminderIconButton(
     onClick: () -> Unit
 ) {
@@ -1019,6 +1018,7 @@ fun ReminderIconButton(
 }
 
 
+@Composable
 fun ShareIconButton(
     onClick: () -> Unit
 ) {

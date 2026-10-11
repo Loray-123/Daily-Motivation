@@ -1088,17 +1088,34 @@ fun DailyMotivationApp() {
     AnimatedContent(
         targetState = showIntro,
         transitionSpec = {
-
-            fadeIn(
-                animationSpec = tween(
-                    durationMillis = 900
-                )
-            ) togetherWith
-                    fadeOut(
-                        animationSpec = tween(
-                            durationMillis = 900
-                        )
+            (
+                fadeIn(
+                    animationSpec = tween(
+                        durationMillis = 800,
+                        delayMillis = 80,
+                        easing = LinearOutSlowInEasing
                     )
+                ) + androidx.compose.animation.scaleIn(
+                    initialScale = 0.985f,
+                    animationSpec = tween(
+                        durationMillis = 800,
+                        easing = LinearOutSlowInEasing
+                    )
+                )
+            ) togetherWith (
+                fadeOut(
+                    animationSpec = tween(
+                        durationMillis = 700,
+                        easing = LinearOutSlowInEasing
+                    )
+                ) + androidx.compose.animation.scaleOut(
+                    targetScale = 1.015f,
+                    animationSpec = tween(
+                        durationMillis = 700,
+                        easing = LinearOutSlowInEasing
+                    )
+                )
+            )
         },
         label = "introTransition"
     ) { introVisible ->
@@ -1111,7 +1128,7 @@ fun DailyMotivationApp() {
 
             LaunchedEffect(Unit) {
 
-                delay(2200L)
+                delay(1900L)
 
                 showIntro = false
             }
@@ -1138,13 +1155,13 @@ fun IntroScreen(
     }
 
     LaunchedEffect(Unit) {
-        targetScale = 1.20f
+        targetScale = 1.08f
     }
 
     val scale by animateFloatAsState(
         targetValue = targetScale,
         animationSpec = tween(
-            durationMillis = 2200,
+            durationMillis = 2600,
             easing = LinearOutSlowInEasing
         ),
         label = "introZoom"

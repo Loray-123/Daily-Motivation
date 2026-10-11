@@ -2,6 +2,7 @@
 package com.dailymotivation.app
 
 import android.content.Context
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
@@ -51,6 +52,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton as MaterialTextButton
 import androidx.compose.runtime.Composable
@@ -964,6 +966,59 @@ fun FavoriteHeartButton(
 // ------------------------------------------------------------
 
 @Composable
+@Composable
+fun ReminderIconButton(
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .width(70.dp)
+            .height(55.dp)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        ComposeCanvas(
+            modifier = Modifier
+                .width(27.dp)
+                .height(29.dp)
+        ) {
+            val line = 1.8.dp.toPx()
+            val color = Color.White.copy(alpha = 0.92f)
+            drawArc(
+                color = color,
+                startAngle = 200f,
+                sweepAngle = 140f,
+                useCenter = false,
+                topLeft = Offset(size.width * 0.18f, size.height * 0.08f),
+                size = androidx.compose.ui.geometry.Size(size.width * 0.64f, size.height * 0.72f),
+                style = androidx.compose.ui.graphics.drawscope.Stroke(width = line)
+            )
+            drawLine(
+                color,
+                Offset(size.width * 0.18f, size.height * 0.70f),
+                Offset(size.width * 0.82f, size.height * 0.70f),
+                strokeWidth = line
+            )
+            drawLine(
+                color,
+                Offset(size.width * 0.39f, size.height * 0.82f),
+                Offset(size.width * 0.61f, size.height * 0.82f),
+                strokeWidth = line
+            )
+            drawCircle(
+                color,
+                radius = line * 1.2f,
+                center = Offset(size.width * 0.50f, size.height * 0.88f)
+            )
+        }
+    }
+}
+
+
 fun ShareIconButton(
     onClick: () -> Unit
 ) {
@@ -1306,6 +1361,17 @@ fun HomeScreen(
             Context.MODE_PRIVATE
         )
 
+    var showReminderDialog by remember { mutableStateOf(false) }
+    var reminderEnabled by remember {
+        mutableStateOf(preferences.getBoolean("reminder_enabled", true))
+    }
+    var reminderHour by remember {
+        mutableStateOf(preferences.getInt("reminder_hour", 8).coerceIn(0, 23))
+    }
+    var reminderMinute by remember {
+        mutableStateOf(preferences.getInt("reminder_minute", 0).coerceIn(0, 59))
+    }
+
     var favoriteSet by remember {
 
         mutableStateOf(
@@ -1554,6 +1620,10 @@ fun HomeScreen(
                         }
                     )
 
+                    ReminderIconButton(
+                        onClick = { showReminderDialog = true }
+                    )
+
                     ShareIconButton(
                         onClick = {
                             shareScope.launch {
@@ -1592,7 +1662,92 @@ fun HomeScreen(
             }
         }
     }
-}
+
+    if (showReminderDialog) {
+        val reminderTimeLabel = String.format(
+            java.util.Locale.getDefault(),
+            "%d:%02d %s",
+            ((reminderHour + 11) % 12) + 1,
+            reminderMinute,
+            if (reminderHour < 12) "AM" else "PM"
+        )
+
+        AlertDialog(
+            onDismissRequest = { showReminderDialog = false },
+            title = { Text("Daily reminder") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("Remind me every day")
+                            Text(
+                                text = if (reminderEnabled) "On" else "Off",
+                                fontSize = 13.sp,
+                                color = androidx.compose.ui.graphics.Color.Gray
+                            )
+                        }
+                        Switch(
+                            checked = reminderEnabled,
+                            onCheckedChange = { enabled ->
+                                reminderEnabled = enabled
+                                preferences.edit()
+                                    .putBoolean("reminder_enabled", enabled)
+                                    .apply()
+                                if (enabled) {
+                                    DailyReminderScheduler.schedule(context)
+                                    if (
+                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                                        context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+                                    ) {
+                                        (context as? ComponentActivity)?.requestPermissions(
+                                            arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                                            1001
+                                        )
+                                    }
+                                } else {
+                                    DailyReminderScheduler.cancel(context)
+                                }
+                            }
+                        )
+                    }
+
+                    MaterialTextButton(
+                        onClick = {
+                            TimePickerDialog(
+                                context,
+                                { _, hour, minute ->
+                                    reminderHour = hour
+                                    reminderMinute = minute
+                                    preferences.edit()
+                                        .putInt("reminder_hour", hour)
+                                        .putInt("reminder_minute", minute)
+                                        .apply()
+                                    if (reminderEnabled) {
+                                        DailyReminderScheduler.schedule(context)
+                                    }
+                                },
+                                reminderHour,
+                                reminderMinute,
+                                false
+                            ).show()
+                        }
+                    ) {
+                        Text("Reminder time: $reminderTimeLabel  ·  Change")
+                    }
+                }
+            },
+            confirmButton = {
+                MaterialTextButton(onClick = { showReminderDialog = false }) {
+                    Text("Done")
+                }
+            }
+        )
+    }
+
 
 
 // ------------------------------------------------------------

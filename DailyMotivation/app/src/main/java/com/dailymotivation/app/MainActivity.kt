@@ -1408,6 +1408,9 @@ fun HomeScreen(
         )
 
     var showReminderDialog by remember { mutableStateOf(false) }
+    var showFavoritesSwipeHint by remember {
+        mutableStateOf(!preferences.getBoolean("has_swiped_favorites", false))
+    }
     var reminderEnabled by remember {
         mutableStateOf(preferences.getBoolean("reminder_enabled", true))
     }
@@ -1452,6 +1455,12 @@ fun HomeScreen(
                         },
                         onDragEnd = {
                             if (kotlin.math.abs(horizontalDrag) > 80f) {
+                                if (showFavoritesSwipeHint) {
+                                    showFavoritesSwipeHint = false
+                                    preferences.edit()
+                                        .putBoolean("has_swiped_favorites", true)
+                                        .apply()
+                                }
                                 onFavorites(if (horizontalDrag > 0f) 1f else -1f)
                             }
                             horizontalDrag = 0f
@@ -1594,26 +1603,28 @@ fun HomeScreen(
                     )
                 }
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 0.dp, end = 0.dp, top = 4.dp, bottom = 12.dp),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Swipe right to see your favorites →",
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.White,
-                        style = androidx.compose.ui.text.TextStyle(
-                            shadow = androidx.compose.ui.graphics.Shadow(
-                                color = Color.Black.copy(alpha = 0.85f),
-                                offset = Offset(0f, 2f),
-                                blurRadius = 5f
+                if (showFavoritesSwipeHint) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 0.dp, end = 0.dp, top = 4.dp, bottom = 12.dp),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Swipe right to see your favorites →",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.White,
+                            style = androidx.compose.ui.text.TextStyle(
+                                shadow = androidx.compose.ui.graphics.Shadow(
+                                    color = Color.Black.copy(alpha = 0.85f),
+                                    offset = Offset(0f, 2f),
+                                    blurRadius = 5f
+                                )
                             )
                         )
-                    )
+                    }
                 }
 
                 Row(

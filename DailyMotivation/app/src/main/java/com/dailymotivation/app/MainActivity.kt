@@ -1088,36 +1088,31 @@ fun DailyMotivationApp() {
     AnimatedContent(
         targetState = showIntro,
         transitionSpec = {
-
             fadeIn(
                 animationSpec = tween(
-                    durationMillis = 900
+                    durationMillis = 550,
+                    delayMillis = 350
                 )
             ) togetherWith
-                    fadeOut(
-                        animationSpec = tween(
-                            durationMillis = 900
-                        )
+                fadeOut(
+                    animationSpec = tween(
+                        durationMillis = 350
                     )
+                )
         },
-        label = "introTransition"
+        label = "introTextTransition"
     ) { introVisible ->
 
         if (introVisible) {
-
             IntroScreen(
                 backgroundImage = backgroundImage
             )
 
             LaunchedEffect(Unit) {
-
                 delay(2200L)
-
                 showIntro = false
             }
-
         } else {
-
             MainAndFavorites()
         }
     }

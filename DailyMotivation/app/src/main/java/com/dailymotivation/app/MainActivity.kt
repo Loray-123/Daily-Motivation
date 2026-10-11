@@ -1088,34 +1088,82 @@ fun DailyMotivationApp() {
     AnimatedContent(
         targetState = showIntro,
         transitionSpec = {
-            (
-                fadeIn(
-                    animationSpec = tween(
-                        durationMillis = 800,
-                        delayMillis = 80,
-                        easing = LinearOutSlowInEasing
+            if (targetState) {
+                (
+                    fadeIn(
+                        animationSpec = tween(
+                            durationMillis = 850,
+                            easing = LinearOutSlowInEasing
+                        )
+                    ) + androidx.compose.animation.slideInVertically(
+                        animationSpec = tween(
+                            durationMillis = 850,
+                            easing = LinearOutSlowInEasing
+                        ),
+                        initialOffsetY = { fullHeight -> fullHeight / 18 }
+                    ) + androidx.compose.animation.scaleIn(
+                        initialScale = 0.96f,
+                        animationSpec = tween(
+                            durationMillis = 850,
+                            easing = LinearOutSlowInEasing
+                        )
                     )
-                ) + androidx.compose.animation.scaleIn(
-                    initialScale = 0.985f,
-                    animationSpec = tween(
-                        durationMillis = 800,
-                        easing = LinearOutSlowInEasing
+                ) togetherWith (
+                    fadeOut(
+                        animationSpec = tween(
+                            durationMillis = 650,
+                            easing = LinearOutSlowInEasing
+                        )
+                    ) + androidx.compose.animation.slideOutVertically(
+                        animationSpec = tween(
+                            durationMillis = 650,
+                            easing = LinearOutSlowInEasing
+                        ),
+                        targetOffsetY = { fullHeight -> -fullHeight / 28 }
                     )
                 )
-            ) togetherWith (
-                fadeOut(
-                    animationSpec = tween(
-                        durationMillis = 700,
-                        easing = LinearOutSlowInEasing
+            } else {
+                (
+                    fadeIn(
+                        animationSpec = tween(
+                            durationMillis = 1000,
+                            delayMillis = 100,
+                            easing = LinearOutSlowInEasing
+                        )
+                    ) + androidx.compose.animation.slideInVertically(
+                        animationSpec = tween(
+                            durationMillis = 1000,
+                            easing = LinearOutSlowInEasing
+                        ),
+                        initialOffsetY = { fullHeight -> fullHeight / 14 }
+                    ) + androidx.compose.animation.scaleIn(
+                        initialScale = 0.96f,
+                        animationSpec = tween(
+                            durationMillis = 1000,
+                            easing = LinearOutSlowInEasing
+                        )
                     )
-                ) + androidx.compose.animation.scaleOut(
-                    targetScale = 1.015f,
-                    animationSpec = tween(
-                        durationMillis = 700,
-                        easing = LinearOutSlowInEasing
+                ) togetherWith (
+                    fadeOut(
+                        animationSpec = tween(
+                            durationMillis = 750,
+                            easing = LinearOutSlowInEasing
+                        )
+                    ) + androidx.compose.animation.slideOutVertically(
+                        animationSpec = tween(
+                            durationMillis = 750,
+                            easing = LinearOutSlowInEasing
+                        ),
+                        targetOffsetY = { fullHeight -> -fullHeight / 24 }
+                    ) + androidx.compose.animation.scaleOut(
+                        targetScale = 1.025f,
+                        animationSpec = tween(
+                            durationMillis = 750,
+                            easing = LinearOutSlowInEasing
+                        )
                     )
                 )
-            )
+            }
         },
         label = "introTransition"
     ) { introVisible ->

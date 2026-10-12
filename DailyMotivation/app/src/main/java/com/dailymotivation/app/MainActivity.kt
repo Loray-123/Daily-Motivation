@@ -2121,7 +2121,7 @@ fun FavoritesScreen(
         }
     }
 
-    quoteToRemove?.let { index ->
+    quoteToRemove?.let { index: Int ->
         AlertDialog(
             onDismissRequest = {
                 quoteToRemove = null

@@ -2122,75 +2122,54 @@ fun FavoritesScreen(
     }
 
     quoteToRemove?.let { index ->
-
         AlertDialog(
             onDismissRequest = {
                 quoteToRemove = null
             },
             title = {
-
                 Text(
-                    style = favoritesShadowStyle,
-                    text =
-                        "Remove favorite?"
+                    style = MaterialTheme.typography.titleLarge,
+                    text = "Remove favorite?"
                 )
             },
             text = {
-
                 Text(
-                    style = favoritesShadowStyle,
-                    text =
-                        "Are you sure you want to remove this quote from your favorites?"
+                    style = MaterialTheme.typography.bodyMedium,
+                    text = "Are you sure you want to remove this quote from your favorites?"
                 )
             },
             confirmButton = {
-
                 MaterialTextButton(
                     onClick = {
-
-                        val newFavorites =
-                            favoriteSet
-                                .toMutableSet()
-
-                        newFavorites.remove(
-                            index.toString()
-                        )
-
+                        val newFavorites = favoriteSet.toMutableSet()
+                        newFavorites.remove(index.toString())
                         preferences.edit()
-                            .putStringSet(
-                                "favorites",
-                                newFavorites
-                            )
+                            .putStringSet("favorites", newFavorites)
                             .apply()
-
-                        favoriteSet =
-                            newFavorites
-
+                        favoriteSet = newFavorites
                         quoteToRemove = null
                     }
                 ) {
-
                     Text(
-                    style = favoritesShadowStyle,
+                        style = MaterialTheme.typography.labelLarge,
                         text = "Remove"
                     )
                 }
             },
             dismissButton = {
-
                 MaterialTextButton(
                     onClick = {
-
                         quoteToRemove = null
                     }
                 ) {
-
                     Text(
-                    style = favoritesShadowStyle,
+                        style = MaterialTheme.typography.labelLarge,
                         text = "Cancel"
                     )
                 }
-            }
+            },
+            tonalElevation = 0.dp,
+            shadowElevation = 0.dp
         )
     }
 }

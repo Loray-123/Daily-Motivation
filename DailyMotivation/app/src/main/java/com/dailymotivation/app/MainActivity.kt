@@ -720,14 +720,6 @@ fun createQuoteShareImage(
         textY += lineHeight
     }
 
-    val authorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = AndroidColor.argb(240, 255, 255, 255)
-        textAlign = Paint.Align.CENTER
-        textSize = 27f
-        typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-    }
-    canvas.drawText("— ${quote.author.uppercase()} —", width / 2f, textY + 58f, authorPaint)
-
     val footerPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = AndroidColor.argb(225, 255, 255, 255)
         textAlign = Paint.Align.CENTER
@@ -1577,30 +1569,6 @@ fun HomeScreen(
                         )
                     )
 
-                    Spacer(
-                        modifier =
-                            Modifier.height(14.dp)
-                    )
-
-                    Text(
-                        text =
-                            "— ${quote.author.uppercase()}",
-                        fontSize = 11.sp,
-                        letterSpacing = 1.5.sp,
-                        fontWeight =
-                            FontWeight.Medium,
-                        color =
-                            Color.White.copy(
-                                alpha = 0.94f
-                            ),
-                        style = androidx.compose.ui.text.TextStyle(
-                            shadow = androidx.compose.ui.graphics.Shadow(
-                                color = Color.Black.copy(alpha = 0.80f),
-                                offset = Offset(0f, 1.5f),
-                                blurRadius = 4f
-                            )
-                        )
-                    )
                 }
 
                 if (showFavoritesSwipeHint) {
@@ -2085,22 +2053,6 @@ fun FavoritesScreen(
                                         TextAlign.Center
                                 )
 
-                                Spacer(
-                                    modifier =
-                                        Modifier.height(12.dp)
-                                )
-
-                                Text(
-                    style = favoritesShadowStyle,
-                                    text =
-                                        "— ${favoriteQuote.author.uppercase()}",
-                                    fontSize = 11.sp,
-                                    letterSpacing = 1.5.sp,
-                                    fontWeight =
-                                        FontWeight.Medium,
-                                    color = Color.White.copy(alpha = 0.94f),
-
-                                )
                             }
 
                             TextButton(

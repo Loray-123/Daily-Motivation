@@ -87,6 +87,8 @@ import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.qrcode.QRCodeWriter
 
 
 // ------------------------------------------------------------
@@ -879,6 +881,35 @@ fun createQuoteShareImage(
     }
 
     canvas.drawText("Get Daily Motivation on Google Play", width / 2f, 1240f, footerPaint)
+
+    val qrSize = 160
+    val qrMatrix = QRCodeWriter().encode(
+        "https://play.google.com/apps/testing/com.brightdays.dailymotivation",
+        BarcodeFormat.QR_CODE,
+        qrSize,
+        qrSize
+    )
+    val qrBitmap = Bitmap.createBitmap(qrSize, qrSize, Bitmap.Config.ARGB_8888)
+    for (x in 0 until qrSize) {
+        for (y in 0 until qrSize) {
+            qrBitmap.setPixel(
+                x,
+                y,
+                if (qrMatrix.get(x, y)) AndroidColor.BLACK else AndroidColor.WHITE
+            )
+        }
+    }
+    val qrBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = AndroidColor.WHITE
+    }
+    canvas.drawRect(890f, 1058f, 1068f, 1236f, qrBackgroundPaint)
+    canvas.drawBitmap(
+        qrBitmap,
+        null,
+        Rect(899, 1067, 1059, 1227),
+        Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
+    )
+    qrBitmap.recycle()
 
     val appCreditPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = AndroidColor.argb(200, 255, 255, 255)

@@ -877,7 +877,6 @@ fun createQuoteShareImage(
         textSize = 34f
         typeface = Typeface.create("sans-serif", Typeface.NORMAL)
     }
-    canvas.drawText("A little inspiration for every day.", width / 2f, 1220f, footerPaint)
 
     val appCreditPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = AndroidColor.argb(200, 255, 255, 255)

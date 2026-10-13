@@ -878,6 +878,8 @@ fun createQuoteShareImage(
         typeface = Typeface.create("sans-serif", Typeface.NORMAL)
     }
 
+    canvas.drawText("Get Daily Motivation on Google Play", width / 2f, 1240f, footerPaint)
+
     val appCreditPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = AndroidColor.argb(200, 255, 255, 255)
         textAlign = Paint.Align.CENTER

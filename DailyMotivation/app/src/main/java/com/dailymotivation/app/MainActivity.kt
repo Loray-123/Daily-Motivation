@@ -2026,46 +2026,48 @@ fun FavoritesScreen(
                         val favoriteQuote =
                             favoriteItem.second
 
-                        Row(
-                            modifier =
-                                Modifier.fillMaxWidth(),
-                            verticalAlignment =
-                                Alignment.CenterVertically
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-
-                            Column(
-                                modifier =
-                                    Modifier.weight(1f),
-                                horizontalAlignment =
-                                    Alignment.CenterHorizontally
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
+                                Column(
+                                    modifier = Modifier.weight(1f),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        style = favoritesShadowStyle,
+                                        text = "“${favoriteQuote.text}”",
+                                        fontSize = 20.sp,
+                                        lineHeight = 29.sp,
+                                        fontWeight = FontWeight.Medium,
+                                        color = Color.White,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
 
-                                Text(
-                    style = favoritesShadowStyle,
-                                    text =
-                                        "“${favoriteQuote.text}”",
-                                    fontSize = 20.sp,
-                                    lineHeight = 29.sp,
-                                    fontWeight =
-                                        FontWeight.Medium,
-                                    color = Color.White,
-                                    textAlign =
-                                        TextAlign.Center
+                                TextButton(
+                                    text = "×",
+                                    modifier = Modifier.width(45.dp),
+                                    fontSize = 25.sp,
+                                    onClick = {
+                                        quoteToRemove = favoriteIndex
+                                    }
                                 )
-
                             }
 
-                            TextButton(
-                                text = "×",
-                                modifier =
-                                    Modifier.width(45.dp),
-                                fontSize = 25.sp,
-                                onClick = {
-
-                                    quoteToRemove =
-                                        favoriteIndex
-                                }
-                            )
+                            if (favoriteIndex != favoriteQuotes.last().first) {
+                                Spacer(modifier = Modifier.height(18.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .width(72.dp)
+                                        .height(1.dp)
+                                        .background(Color.White.copy(alpha = 0.65f))
+                                )
+                            }
                         }
                     }
                 }

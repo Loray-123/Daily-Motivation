@@ -1598,7 +1598,7 @@ fun HomeScreen(
                         },
                         onDragEnd = {
                             if (kotlin.math.abs(horizontalDrag) > 80f) {
-                                if (showFavoritesSwipeHint) {
+                                if (horizontalDrag > 0f && showFavoritesSwipeHint) {
                                     showFavoritesSwipeHint = false
                                     preferences.edit()
                                         .putBoolean("has_swiped_favorites", true)

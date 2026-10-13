@@ -481,7 +481,7 @@ val quotes = listOf(
     Quote("You can find a new solution with a calm mind.", "Unknown"),
     Quote("Keep your promises small enough to keep.", "Unknown"),
     Quote("Your effort today is part of your future.", "Unknown"),
-    Quote("Try once more with a kinder approach.", "Unknown")
+    Quote("Try once more with a kinder approach.", "Unknown"),
     Quote("You do not need to be the loudest person in the room to matter.", "Unknown", "Confidence and Self-Esteem"),
     Quote("Let your actions remind you what you are capable of.", "Unknown", "Confidence and Self-Esteem"),
     Quote("Your opinion of yourself deserves a voice, too.", "Unknown", "Confidence and Self-Esteem"),

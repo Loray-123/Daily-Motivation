@@ -883,11 +883,13 @@ fun createQuoteShareImage(
     canvas.drawText("Get Daily Motivation on Google Play", width / 2f, 1110f, footerPaint)
 
     val qrSize = 160
+    val qrHints = mapOf(com.google.zxing.EncodeHintType.MARGIN to 1)
     val qrMatrix = QRCodeWriter().encode(
         "https://play.google.com/apps/testing/com.brightdays.dailymotivation",
         BarcodeFormat.QR_CODE,
         qrSize,
-        qrSize
+        qrSize,
+        qrHints
     )
     val qrBitmap = Bitmap.createBitmap(qrSize, qrSize, Bitmap.Config.ARGB_8888)
     for (x in 0 until qrSize) {
@@ -902,7 +904,7 @@ fun createQuoteShareImage(
     val qrBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = AndroidColor.WHITE
     }
-    canvas.drawRect(451f, 1148f, 629f, 1326f, qrBackgroundPaint)
+    canvas.drawRoundRect(451f, 1148f, 629f, 1326f, 22f, 22f, qrBackgroundPaint)
     canvas.drawBitmap(
         qrBitmap,
         null,

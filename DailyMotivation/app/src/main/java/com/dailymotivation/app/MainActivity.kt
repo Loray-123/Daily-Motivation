@@ -2209,8 +2209,8 @@ fun FavoritesScreen(
 
                                 TextButton(
                                     text = "×",
-                                    modifier = Modifier.width(45.dp),
-                                    fontSize = 25.sp,
+                                    modifier = Modifier.width(36.dp),
+                                    fontSize = 20.sp,
                                     onClick = {
                                         quoteToRemove = favoriteIndex
                                     }

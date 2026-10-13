@@ -2197,6 +2197,7 @@ fun FavoritesScreen(
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text(
+                                        modifier = Modifier.padding(end = 10.dp),
                                         style = favoritesShadowStyle,
                                         text = "${favoriteQuote.text}",
                                         fontSize = 20.sp,
@@ -2209,8 +2210,8 @@ fun FavoritesScreen(
 
                                 TextButton(
                                     text = "×",
-                                    modifier = Modifier.width(36.dp),
-                                    fontSize = 20.sp,
+                                    modifier = Modifier.width(28.dp),
+                                    fontSize = 16.sp,
                                     onClick = {
                                         quoteToRemove = favoriteIndex
                                     }

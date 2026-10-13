@@ -1498,7 +1498,14 @@ fun HomeScreen(
                             FontFamily.Cursive,
                         fontWeight =
                             FontWeight.Normal,
-                        color = Color.White
+                        color = Color.White,
+                        style = androidx.compose.ui.text.TextStyle(
+                            shadow = androidx.compose.ui.graphics.Shadow(
+                                color = Color.Black.copy(alpha = 0.55f),
+                                offset = Offset(0f, 2f),
+                                blurRadius = 4f
+                            )
+                        )
                     )
 
                     Row(

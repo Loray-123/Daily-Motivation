@@ -2194,7 +2194,7 @@ fun FavoritesScreen(
                             ) {
                                 Column(
                                     modifier = Modifier.weight(1f),
-                                    horizontalAlignment = Alignment.Start
+                                    horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
                                     Text(
                                         modifier = Modifier.padding(end = 10.dp),
@@ -2204,7 +2204,7 @@ fun FavoritesScreen(
                                         lineHeight = 29.sp,
                                         fontWeight = FontWeight.Medium,
                                         color = Color.White,
-                                        textAlign = TextAlign.Start
+                                        textAlign = TextAlign.Center
                                     )
                                 }
 

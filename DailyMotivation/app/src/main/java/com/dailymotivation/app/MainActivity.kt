@@ -711,7 +711,7 @@ fun createQuoteShareImage(
         setShadowLayer(7f, 0f, 2f, AndroidColor.argb(160, 0, 0, 0))
     }
     val maxTextWidth = 850f
-    val quoteLines = wrapShareText("“${quote.text}”", quotePaint, maxTextWidth)
+    val quoteLines = wrapShareText("${quote.text}", quotePaint, maxTextWidth)
     val lineHeight = 68f
     val quoteBlockHeight = quoteLines.size * lineHeight
     var textY = (height * 0.52f) - quoteBlockHeight / 2f + lineHeight / 2f
@@ -1559,7 +1559,7 @@ fun HomeScreen(
 
                     Text(
                         text =
-                            "“${quote.text}”",
+                            "${quote.text}",
                         fontSize = 23.sp,
                         lineHeight = 32.sp,
                         fontWeight =
@@ -2047,7 +2047,7 @@ fun FavoritesScreen(
                                 ) {
                                     Text(
                                         style = favoritesShadowStyle,
-                                        text = "“${favoriteQuote.text}”",
+                                        text = "${favoriteQuote.text}",
                                         fontSize = 20.sp,
                                         lineHeight = 29.sp,
                                         fontWeight = FontWeight.Medium,

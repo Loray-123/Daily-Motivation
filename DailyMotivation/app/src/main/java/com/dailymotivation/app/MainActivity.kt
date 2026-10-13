@@ -880,7 +880,7 @@ fun createQuoteShareImage(
         typeface = Typeface.create("sans-serif", Typeface.NORMAL)
     }
 
-    canvas.drawText("Get Daily Motivation on Google Play", width / 2f, 1240f, footerPaint)
+    canvas.drawText("Get Daily Motivation on Google Play", width / 2f, 1110f, footerPaint)
 
     val qrSize = 160
     val qrMatrix = QRCodeWriter().encode(
@@ -902,22 +902,14 @@ fun createQuoteShareImage(
     val qrBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = AndroidColor.WHITE
     }
-    canvas.drawRect(890f, 1058f, 1068f, 1236f, qrBackgroundPaint)
+    canvas.drawRect(451f, 1148f, 629f, 1326f, qrBackgroundPaint)
     canvas.drawBitmap(
         qrBitmap,
         null,
-        Rect(899, 1067, 1059, 1227),
+        Rect(460, 1157, 620, 1317),
         Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
     )
     qrBitmap.recycle()
-
-    val appCreditPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = AndroidColor.argb(200, 255, 255, 255)
-        textAlign = Paint.Align.CENTER
-        textSize = 28f
-        typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-    }
-    canvas.drawText("Shared from Daily Motivation", width / 2f, 1300f, appCreditPaint)
 
     val shareDirectory = java.io.File(context.cacheDir, "shared_quotes")
     if (!shareDirectory.exists()) shareDirectory.mkdirs()

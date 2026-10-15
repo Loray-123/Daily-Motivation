@@ -1236,12 +1236,17 @@ fun ReminderIconButton(
 
 @Composable
 fun ShareIconButton(
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    compact: Boolean = false
 ) {
+    val buttonWidth = if (compact) 28.dp else 70.dp
+    val buttonHeight = if (compact) 28.dp else 55.dp
+    val iconSize = if (compact) 16.dp else 28.dp
+
     Box(
         modifier = Modifier
-            .width(70.dp)
-            .height(55.dp)
+            .width(buttonWidth)
+            .height(buttonHeight)
             .clickable(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
@@ -1249,29 +1254,22 @@ fun ShareIconButton(
             ),
         contentAlignment = Alignment.Center
     ) {
-        Box(
+        ComposeCanvas(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(55.dp),
-            contentAlignment = Alignment.Center
+                .width(iconSize)
+                .height(iconSize)
         ) {
-            ComposeCanvas(
-                modifier = Modifier
-                    .width(28.dp)
-                    .height(28.dp)
-            ) {
-                val stroke = 1.8.dp.toPx()
-                val radius = 3.1.dp.toPx()
-                val left = Offset(size.width * 0.23f, size.height * 0.50f)
-                val topRight = Offset(size.width * 0.76f, size.height * 0.22f)
-                val bottomRight = Offset(size.width * 0.76f, size.height * 0.78f)
+            val stroke = (if (compact) 1.4f else 1.8f).dp.toPx()
+            val radius = (if (compact) 2.1f else 3.1f).dp.toPx()
+            val left = Offset(size.width * 0.23f, size.height * 0.50f)
+            val topRight = Offset(size.width * 0.76f, size.height * 0.22f)
+            val bottomRight = Offset(size.width * 0.76f, size.height * 0.78f)
 
-                drawLine(Color.White.copy(alpha = 0.9f), left, topRight, strokeWidth = stroke)
-                drawLine(Color.White.copy(alpha = 0.9f), left, bottomRight, strokeWidth = stroke)
-                drawCircle(Color.White, radius, left)
-                drawCircle(Color.White, radius, topRight)
-                drawCircle(Color.White, radius, bottomRight)
-            }
+            drawLine(Color.White.copy(alpha = 0.9f), left, topRight, strokeWidth = stroke)
+            drawLine(Color.White.copy(alpha = 0.9f), left, bottomRight, strokeWidth = stroke)
+            drawCircle(Color.White, radius, left)
+            drawCircle(Color.White, radius, topRight)
+            drawCircle(Color.White, radius, bottomRight)
         }
     }
 }
@@ -2240,48 +2238,55 @@ fun FavoritesScreen(
                                     )
                                 }
 
-                                ShareIconButton(
-                                    onClick = {
-                                        shareScope.launch {
-                                            val shareUri = withContext(Dispatchers.IO) {
-                                                try {
-                                                    createQuoteShareImage(
-                                                        context = context,
-                                                        backgroundImage = backgroundImage,
-                                                        quote = favoriteQuote
-                                                    )
-                                                } catch (e: Exception) {
-                                                    null
+                                Column(
+                                    modifier = Modifier.width(30.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                                ) {
+                                    ShareIconButton(
+                                        compact = true,
+                                        onClick = {
+                                            shareScope.launch {
+                                                val shareUri = withContext(Dispatchers.IO) {
+                                                    try {
+                                                        createQuoteShareImage(
+                                                            context = context,
+                                                            backgroundImage = backgroundImage,
+                                                            quote = favoriteQuote
+                                                        )
+                                                    } catch (e: Exception) {
+                                                        null
+                                                    }
                                                 }
-                                            }
 
-                                            if (shareUri != null) {
-                                                val sendIntent = Intent(Intent.ACTION_SEND).apply {
-                                                    type = "image/png"
-                                                    putExtra(Intent.EXTRA_STREAM, shareUri)
-                                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                                    clipData = android.content.ClipData.newUri(
-                                                        context.contentResolver,
-                                                        "Daily Motivation saved quote",
-                                                        shareUri
+                                                if (shareUri != null) {
+                                                    val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                                                        type = "image/png"
+                                                        putExtra(Intent.EXTRA_STREAM, shareUri)
+                                                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                                        clipData = android.content.ClipData.newUri(
+                                                            context.contentResolver,
+                                                            "Daily Motivation saved quote",
+                                                            shareUri
+                                                        )
+                                                    }
+                                                    context.startActivity(
+                                                        Intent.createChooser(sendIntent, "Share Saved Quote")
                                                     )
                                                 }
-                                                context.startActivity(
-                                                    Intent.createChooser(sendIntent, "Share Saved Quote")
-                                                )
                                             }
                                         }
-                                    }
-                                )
+                                    )
 
-                                TextButton(
-                                    text = "×",
-                                    modifier = Modifier.width(28.dp),
-                                    fontSize = 16.sp,
-                                    onClick = {
-                                        quoteToRemove = favoriteIndex
-                                    }
-                                )
+                                    TextButton(
+                                        text = "×",
+                                        modifier = Modifier.width(28.dp),
+                                        fontSize = 16.sp,
+                                        onClick = {
+                                            quoteToRemove = favoriteIndex
+                                        }
+                                    )
+                                }
                             }
 
                             if (favoriteIndex != favoriteQuotes.last().first) {

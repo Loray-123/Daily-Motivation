@@ -915,7 +915,7 @@ fun createQuoteShareImage(
 
     val shareDirectory = java.io.File(context.cacheDir, "shared_quotes")
     if (!shareDirectory.exists()) shareDirectory.mkdirs()
-    val imageFile = java.io.File(shareDirectory, "daily_motivation_quote.png")
+    val imageFile = java.io.File(shareDirectory, "daily_motivation_quote_${java.util.UUID.randomUUID()}.png")
     imageFile.outputStream().use { output ->
         outputBitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
     }

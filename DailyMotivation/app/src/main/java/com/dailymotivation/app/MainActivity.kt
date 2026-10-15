@@ -1968,6 +1968,8 @@ fun FavoritesScreen(
 
     val context = LocalContext.current
 
+    val shareScope = rememberCoroutineScope()
+
     val favoritesShadowStyle = androidx.compose.ui.text.TextStyle(
         shadow = androidx.compose.ui.graphics.Shadow(
             color = Color.Black.copy(alpha = 0.82f),
@@ -2237,6 +2239,40 @@ fun FavoritesScreen(
                                         textAlign = TextAlign.Center
                                     )
                                 }
+
+                                ShareIconButton(
+                                    onClick = {
+                                        shareScope.launch {
+                                            val shareUri = withContext(Dispatchers.IO) {
+                                                try {
+                                                    createQuoteShareImage(
+                                                        context = context,
+                                                        backgroundImage = backgroundImage,
+                                                        quote = favoriteQuote
+                                                    )
+                                                } catch (e: Exception) {
+                                                    null
+                                                }
+                                            }
+
+                                            if (shareUri != null) {
+                                                val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                                                    type = "image/png"
+                                                    putExtra(Intent.EXTRA_STREAM, shareUri)
+                                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                                    clipData = android.content.ClipData.newUri(
+                                                        context.contentResolver,
+                                                        "Daily Motivation saved quote",
+                                                        shareUri
+                                                    )
+                                                }
+                                                context.startActivity(
+                                                    Intent.createChooser(sendIntent, "Share Saved Quote")
+                                                )
+                                            }
+                                        }
+                                    }
+                                )
 
                                 TextButton(
                                     text = "×",

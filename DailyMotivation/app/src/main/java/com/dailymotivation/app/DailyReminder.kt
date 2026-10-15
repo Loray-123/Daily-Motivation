@@ -1,5 +1,7 @@
 package com.dailymotivation.app
 
+import com.brightdays.dailymotivation.R
+
 import android.Manifest
 import android.app.AlarmManager
 import android.app.NotificationChannel

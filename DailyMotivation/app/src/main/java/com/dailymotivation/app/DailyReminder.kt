@@ -98,7 +98,7 @@ object DailyReminderScheduler {
         )
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setSmallIcon(R.drawable.ic_daily_reminder)
             .setContentTitle("Your daily motivation is waiting")
             .setContentText("Open Daily Motivation to read today's quote.")
             .setStyle(

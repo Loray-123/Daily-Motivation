@@ -77,6 +77,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -1745,6 +1746,7 @@ fun HomeScreen(
                             TextAlign.Center,
                         color = Color.White,
                         style = androidx.compose.ui.text.TextStyle(
+                            textDirection = TextDirection.Ltr,
                             shadow = androidx.compose.ui.graphics.Shadow(
                                 color = Color.Black.copy(alpha = 0.85f),
                                 offset = Offset(0f, 2f),
@@ -2224,7 +2226,9 @@ fun FavoritesScreen(
                                 ) {
                                     Text(
                                         modifier = Modifier.padding(end = 10.dp),
-                                        style = favoritesShadowStyle,
+                                        style = favoritesShadowStyle.copy(
+                                            textDirection = TextDirection.Ltr
+                                        ),
                                         text = "${favoriteQuote.text}",
                                         fontSize = 20.sp,
                                         lineHeight = 29.sp,

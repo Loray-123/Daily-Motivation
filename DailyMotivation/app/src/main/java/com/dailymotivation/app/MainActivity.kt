@@ -1,6 +1,8 @@
 
 package com.dailymotivation.app
 
+import com.brightdays.dailymotivation.R
+
 import android.content.Context
 import android.app.TimePickerDialog
 import android.content.Intent

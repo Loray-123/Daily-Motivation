@@ -4,6 +4,6 @@
     <style name="Theme.DailyMotivation" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowBackground">#F3DFA2</item>
         <item name="android:windowSplashScreenBackground">#F3DFA2</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_transparent</item>
     </style>
 </resources>

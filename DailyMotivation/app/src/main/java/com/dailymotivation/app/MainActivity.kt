@@ -1003,7 +1003,7 @@ fun TextButton(
         textAlign = TextAlign.Center,
         style = androidx.compose.ui.text.TextStyle(
             shadow = androidx.compose.ui.graphics.Shadow(
-                color = Color.Black.copy(alpha = 0.82f),
+                color = Color.Black.copy(alpha = 0.88f),
                 offset = Offset(0f, 2f),
                 blurRadius = 5f
             )
@@ -1680,7 +1680,14 @@ fun HomeScreen(
                         letterSpacing = 4.sp,
                         fontWeight =
                             FontWeight.Medium,
-                        color = Color.White
+                        color = Color.White,
+                        style = androidx.compose.ui.text.TextStyle(
+                            shadow = androidx.compose.ui.graphics.Shadow(
+                                color = Color.Black.copy(alpha = 0.35f),
+                                offset = Offset(0f, 1f),
+                                blurRadius = 2f
+                            )
+                        )
                     )
 
                     Text(
@@ -1762,7 +1769,7 @@ fun HomeScreen(
                         style = androidx.compose.ui.text.TextStyle(
                             textDirection = TextDirection.Ltr,
                             shadow = androidx.compose.ui.graphics.Shadow(
-                                color = Color.Black.copy(alpha = 0.85f),
+                                color = Color.Black.copy(alpha = 0.92f),
                                 offset = Offset(0f, 2f),
                                 blurRadius = 5f
                             )
@@ -1976,7 +1983,7 @@ fun FavoritesScreen(
 
     val favoritesShadowStyle = androidx.compose.ui.text.TextStyle(
         shadow = androidx.compose.ui.graphics.Shadow(
-            color = Color.Black.copy(alpha = 0.82f),
+            color = Color.Black.copy(alpha = 0.88f),
             offset = Offset(0f, 2f),
             blurRadius = 5f
         )

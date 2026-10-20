@@ -90,6 +90,7 @@ import kotlinx.coroutines.withContext
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.security.MessageDigest
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
 
@@ -113,10 +114,15 @@ fun categorizeQuote(text: String): String {
     }
 }
 
+fun stableQuoteId(text: String): String = MessageDigest.getInstance("SHA-256")
+    .digest(text.toByteArray(Charsets.UTF_8))
+    .joinToString("") { byte -> "%02x".format(byte.toInt() and 0xff) }
+
 data class Quote(
     val text: String,
     val author: String,
-    val category: String = categorizeQuote(text)
+    val category: String = categorizeQuote(text),
+    val id: String = stableQuoteId(text)
 )
 
 // Short, easy-to-understand motivational quotes without religious references.
@@ -623,6 +629,29 @@ val quotes = listOf(
     Quote("You can care about someone and still need distance. You do not have to be endlessly available to be a good person.", "Unknown", "Self-Love"),
     Quote("You can regret a choice without punishing yourself forever. You can ask for help without surrendering your independence.", "Unknown", "Self-Love")
 )
+// Migrate legacy saved quote indexes to stable quote IDs once. The legacy
+// "favorites" key is intentionally left untouched so the migration is safe to retry.
+fun loadFavoriteIds(context: Context): Set<String> {
+    val preferences = context.getSharedPreferences("daily_motivation", Context.MODE_PRIVATE)
+    val savedIds = preferences.getStringSet("favorite_ids", emptySet())?.toMutableSet() ?: mutableSetOf()
+
+    if (!preferences.getBoolean("favorites_ids_migrated", false)) {
+        val legacyIndexes = preferences.getStringSet("favorites", emptySet()) ?: emptySet()
+        legacyIndexes.forEach { indexString ->
+            val index = indexString.toIntOrNull()
+            if (index != null && index in quotes.indices) {
+                savedIds.add(quotes[index].id)
+            }
+        }
+        preferences.edit()
+            .putStringSet("favorite_ids", savedIds)
+            .putBoolean("favorites_ids_migrated", true)
+            .apply()
+    }
+
+    return savedIds
+}
+
 // ------------------------------------------------------------
 // BACKGROUND HELPERS
 // ------------------------------------------------------------
@@ -1591,19 +1620,10 @@ fun HomeScreen(
     }
 
     var favoriteSet by remember {
-
-        mutableStateOf(
-            preferences.getStringSet(
-                "favorites",
-                emptySet()
-            ) ?: emptySet()
-        )
+        mutableStateOf(loadFavoriteIds(context))
     }
 
-    val isSaved =
-        favoriteSet.contains(
-            quoteIndex.toString()
-        )
+    val isSaved = favoriteSet.contains(quote.id)
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -1803,23 +1823,13 @@ fun HomeScreen(
                                     .toMutableSet()
 
                             if (isSaved) {
-
-                                newFavorites.remove(
-                                    quoteIndex.toString()
-                                )
-
+                                newFavorites.remove(quote.id)
                             } else {
-
-                                newFavorites.add(
-                                    quoteIndex.toString()
-                                )
+                                newFavorites.add(quote.id)
                             }
 
                             preferences.edit()
-                                .putStringSet(
-                                    "favorites",
-                                    newFavorites
-                                )
+                                .putStringSet("favorite_ids", newFavorites)
                                 .apply()
 
                             favoriteSet =
@@ -2019,37 +2029,15 @@ fun FavoritesScreen(
         )
 
     var favoriteSet by remember {
-
-        mutableStateOf(
-            preferences.getStringSet(
-                "favorites",
-                emptySet()
-            ) ?: emptySet()
-        )
+        mutableStateOf(loadFavoriteIds(context))
     }
 
-    val favoriteQuotes =
-        favoriteSet.mapNotNull { indexString ->
-
-            val index =
-                indexString.toIntOrNull()
-
-            if (
-                index != null &&
-                index >= 0 &&
-                index < quotes.size
-            ) {
-
-                index to quotes[index]
-
-            } else {
-
-                null
-            }
-        }
+    val favoriteQuotes = favoriteSet.mapNotNull { quoteId ->
+        quotes.firstOrNull { it.id == quoteId }?.let { quote -> quote.id to quote }
+    }
 
     var quoteToRemove by remember {
-        mutableStateOf<Int?>(null)
+        mutableStateOf<String?>(null)
     }
 
     Box(
@@ -2207,8 +2195,7 @@ fun FavoritesScreen(
                         favoriteQuotes
                     ) { favoriteItem ->
 
-                        val favoriteIndex =
-                            favoriteItem.first
+                        val favoriteId = favoriteItem.first
 
                         val favoriteQuote =
                             favoriteItem.second
@@ -2284,13 +2271,13 @@ fun FavoritesScreen(
                                         modifier = Modifier.width(28.dp),
                                         fontSize = 16.sp,
                                         onClick = {
-                                            quoteToRemove = favoriteIndex
+                                            quoteToRemove = favoriteId
                                         }
                                     )
                                 }
                             }
 
-                            if (favoriteIndex != favoriteQuotes.last().first) {
+                            if (favoriteId != favoriteQuotes.last().first) {
                                 Spacer(modifier = Modifier.height(18.dp))
                                 Box(
                                     modifier = Modifier
@@ -2306,7 +2293,7 @@ fun FavoritesScreen(
         }
     }
 
-    quoteToRemove?.let { index ->
+    quoteToRemove?.let { favoriteId ->
 
         AlertDialog(
             onDismissRequest = {
@@ -2322,10 +2309,10 @@ fun FavoritesScreen(
                 MaterialTextButton(
                     onClick = {
                         val newFavorites = favoriteSet.toMutableSet()
-                        newFavorites.remove(index.toString())
+                        newFavorites.remove(favoriteId)
 
                         preferences.edit()
-                            .putStringSet("favorites", newFavorites)
+                            .putStringSet("favorite_ids", newFavorites)
                             .apply()
 
                         favoriteSet = newFavorites

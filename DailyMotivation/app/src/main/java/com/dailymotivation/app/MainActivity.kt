@@ -624,27 +624,43 @@ val quotes = listOf(
     Quote("You can care about someone and still need distance. You do not have to be endlessly available to be a good person.", "Unknown", "Self-Love", id = "quote_499"),
     Quote("You can regret a choice without punishing yourself forever. You can ask for help without surrendering your independence.", "Unknown", "Self-Love", id = "quote_500")
 )
-// Migrate legacy saved quote indexes to stable quote IDs once. The legacy
-// "favorites" key is intentionally left untouched so the migration is safe to retry.
+// Favorites are stored as an ordered list so the most recently saved quote appears first.
+// The set key remains for backwards compatibility with existing installations.
 fun loadFavoriteIds(context: Context): Set<String> {
     val preferences = context.getSharedPreferences("daily_motivation", Context.MODE_PRIVATE)
-    val savedIds = preferences.getStringSet("favorite_ids", emptySet())?.toMutableSet() ?: mutableSetOf()
+    val savedIds = preferences.getStringSet("favorite_ids", emptySet())?.toSet() ?: emptySet()
+    val orderedIds = linkedSetOf<String>()
+
+    preferences.getString("favorite_order", null)
+        ?.split("\\n")
+        ?.filter { it.isNotBlank() && it in savedIds }
+        ?.forEach { orderedIds.add(it) }
+
+    // Preserve the existing favorites when installing this ordering fix.
+    savedIds.forEach { orderedIds.add(it) }
 
     if (!preferences.getBoolean("favorites_ids_migrated", false)) {
         val legacyIndexes = preferences.getStringSet("favorites", emptySet()) ?: emptySet()
         legacyIndexes.forEach { indexString ->
             val index = indexString.toIntOrNull()
             if (index != null && index in quotes.indices) {
-                savedIds.add(quotes[index].id)
+                orderedIds.add(quotes[index].id)
             }
         }
         preferences.edit()
-            .putStringSet("favorite_ids", savedIds)
+            .putStringSet("favorite_ids", orderedIds)
+            .putString("favorite_order", orderedIds.joinToString("\\n"))
             .putBoolean("favorites_ids_migrated", true)
+            .apply()
+    } else if (orderedIds.size != savedIds.size ||
+        preferences.getString("favorite_order", null) == null
+    ) {
+        preferences.edit()
+            .putString("favorite_order", orderedIds.joinToString("\\n"))
             .apply()
     }
 
-    return savedIds
+    return orderedIds
 }
 
 // ------------------------------------------------------------
@@ -1820,22 +1836,24 @@ fun HomeScreen(
                         isSaved = isSaved,
                         onClick = {
 
-                            val newFavorites =
-                                favoriteSet
-                                    .toMutableSet()
+                            val newFavorites = favoriteSet.toMutableSet()
 
                             if (isSaved) {
                                 newFavorites.remove(quote.id)
                             } else {
-                                newFavorites.add(quote.id)
+                                // Put newly saved quotes at the top of the favorites list.
+                                val reorderedFavorites = linkedSetOf(quote.id)
+                                reorderedFavorites.addAll(newFavorites)
+                                newFavorites.clear()
+                                newFavorites.addAll(reorderedFavorites)
                             }
 
                             preferences.edit()
                                 .putStringSet("favorite_ids", newFavorites)
+                                .putString("favorite_order", newFavorites.joinToString("\\n"))
                                 .apply()
 
-                            favoriteSet =
-                                newFavorites
+                            favoriteSet = newFavorites
                         }
                     )
 
@@ -2315,6 +2333,7 @@ fun FavoritesScreen(
 
                         preferences.edit()
                             .putStringSet("favorite_ids", newFavorites)
+                            .putString("favorite_order", newFavorites.joinToString("\\n"))
                             .apply()
 
                         favoriteSet = newFavorites

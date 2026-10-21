@@ -631,8 +631,9 @@ fun loadFavoriteIds(context: Context): Set<String> {
     val savedIds = preferences.getStringSet("favorite_ids", emptySet())?.toSet() ?: emptySet()
     val orderedIds = linkedSetOf<String>()
 
+    // Read both the previous delimiter and the current comma delimiter.
     preferences.getString("favorite_order", null)
-        ?.split("\\n")
+        ?.split(",", "\\n")
         ?.filter { it.isNotBlank() && it in savedIds }
         ?.forEach { orderedIds.add(it) }
 
@@ -649,14 +650,14 @@ fun loadFavoriteIds(context: Context): Set<String> {
         }
         preferences.edit()
             .putStringSet("favorite_ids", orderedIds)
-            .putString("favorite_order", orderedIds.joinToString("\\n"))
+            .putString("favorite_order", orderedIds.joinToString(","))
             .putBoolean("favorites_ids_migrated", true)
             .apply()
     } else if (orderedIds.size != savedIds.size ||
         preferences.getString("favorite_order", null) == null
     ) {
         preferences.edit()
-            .putString("favorite_order", orderedIds.joinToString("\\n"))
+            .putString("favorite_order", orderedIds.joinToString(","))
             .apply()
     }
 
@@ -1850,7 +1851,7 @@ fun HomeScreen(
 
                             preferences.edit()
                                 .putStringSet("favorite_ids", newFavorites)
-                                .putString("favorite_order", newFavorites.joinToString("\\n"))
+                                .putString("favorite_order", newFavorites.joinToString(","))
                                 .apply()
 
                             favoriteSet = newFavorites
@@ -2052,7 +2053,15 @@ fun FavoritesScreen(
         mutableStateOf(loadFavoriteIds(context))
     }
 
-    val favoriteQuotes = favoriteSet.mapNotNull { quoteId ->
+    // Always render from the persisted order, not from a Set's iteration order.
+    val favoriteOrder = remember(favoriteSet) {
+        val storedOrder = preferences.getString("favorite_order", null)
+            ?.split(",", "\\n")
+            ?.filter { it.isNotBlank() && it in favoriteSet }
+            .orEmpty()
+        (storedOrder + favoriteSet.filterNot { it in storedOrder }).distinct()
+    }
+    val favoriteQuotes = favoriteOrder.mapNotNull { quoteId ->
         quotes.firstOrNull { it.id == quoteId }?.let { quote -> quote.id to quote }
     }
 
@@ -2333,7 +2342,7 @@ fun FavoritesScreen(
 
                         preferences.edit()
                             .putStringSet("favorite_ids", newFavorites)
-                            .putString("favorite_order", newFavorites.joinToString("\\n"))
+                            .putString("favorite_order", newFavorites.joinToString(","))
                             .apply()
 
                         favoriteSet = newFavorites

@@ -878,7 +878,7 @@ fun createQuoteShareImage(
         textAlign = Paint.Align.CENTER
         textSize = 78f
         typeface = Typeface.create("cursive", Typeface.NORMAL)
-        setShadowLayer(8f, 0f, 3f, AndroidColor.argb(130, 0, 0, 0))
+        setShadowLayer(8f, 0f, 3f, AndroidColor.argb(145, 0, 0, 0))
     }
     canvas.drawText("Motivation", width / 2f, 250f, titlePaint)
 
@@ -895,7 +895,7 @@ fun createQuoteShareImage(
         textAlign = Paint.Align.CENTER
         textSize = 58f
         typeface = Typeface.create("sans-serif", Typeface.NORMAL)
-        setShadowLayer(5f, 0f, 2f, AndroidColor.argb(100, 0, 0, 0))
+        setShadowLayer(5f, 0f, 2f, AndroidColor.argb(115, 0, 0, 0))
     }
     canvas.drawText("♡", width / 2f, 350f, heartPaint)
 
@@ -904,7 +904,7 @@ fun createQuoteShareImage(
         textAlign = Paint.Align.CENTER
         textSize = 49f
         typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-        setShadowLayer(7f, 0f, 2f, AndroidColor.argb(160, 0, 0, 0))
+        setShadowLayer(7f, 0f, 2f, AndroidColor.argb(175, 0, 0, 0))
     }
     val maxTextWidth = 850f
     val quoteLines = wrapShareText("${quote.text}", quotePaint, maxTextWidth)
@@ -1020,7 +1020,7 @@ fun TextButton(
         textAlign = TextAlign.Center,
         style = androidx.compose.ui.text.TextStyle(
             shadow = androidx.compose.ui.graphics.Shadow(
-                color = Color.Black.copy(alpha = 0.88f),
+                color = Color.Black.copy(alpha = 0.92f),
                 offset = Offset(0f, 2f),
                 blurRadius = 5f
             )
@@ -1700,7 +1700,7 @@ fun HomeScreen(
                         color = Color.White,
                         style = androidx.compose.ui.text.TextStyle(
                             shadow = androidx.compose.ui.graphics.Shadow(
-                                color = Color.Black.copy(alpha = 0.35f),
+                                color = Color.Black.copy(alpha = 0.42f),
                                 offset = Offset(0f, 1f),
                                 blurRadius = 2f
                             )
@@ -1717,7 +1717,7 @@ fun HomeScreen(
                         color = Color.White,
                         style = androidx.compose.ui.text.TextStyle(
                             shadow = androidx.compose.ui.graphics.Shadow(
-                                color = Color.Black.copy(alpha = 0.55f),
+                                color = Color.Black.copy(alpha = 0.62f),
                                 offset = Offset(0f, 2f),
                                 blurRadius = 4f
                             )
@@ -1786,7 +1786,7 @@ fun HomeScreen(
                         style = androidx.compose.ui.text.TextStyle(
                             textDirection = TextDirection.Ltr,
                             shadow = androidx.compose.ui.graphics.Shadow(
-                                color = Color.Black.copy(alpha = 0.92f),
+                                color = Color.Black.copy(alpha = 0.96f),
                                 offset = Offset(0f, 2f),
                                 blurRadius = 5f
                             )
@@ -1810,7 +1810,7 @@ fun HomeScreen(
                             color = Color.White,
                             style = androidx.compose.ui.text.TextStyle(
                                 shadow = androidx.compose.ui.graphics.Shadow(
-                                    color = Color.Black.copy(alpha = 0.85f),
+                                    color = Color.Black.copy(alpha = 0.90f),
                                     offset = Offset(0f, 2f),
                                     blurRadius = 5f
                                 )
@@ -2002,7 +2002,7 @@ fun FavoritesScreen(
 
     val favoritesShadowStyle = androidx.compose.ui.text.TextStyle(
         shadow = androidx.compose.ui.graphics.Shadow(
-            color = Color.Black.copy(alpha = 0.88f),
+            color = Color.Black.copy(alpha = 0.92f),
             offset = Offset(0f, 2f),
             blurRadius = 5f
         )

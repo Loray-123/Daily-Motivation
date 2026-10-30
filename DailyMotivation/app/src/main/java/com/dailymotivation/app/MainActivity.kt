@@ -928,7 +928,7 @@ fun createQuoteShareImage(
     val qrSize = 160
     val qrHints = mapOf(com.google.zxing.EncodeHintType.MARGIN to 1)
     val qrMatrix = QRCodeWriter().encode(
-        "https://play.google.com/apps/testing/com.brightdays.dailymotivation",
+        "https://play.google.com/store/apps/details?id=com.brightdays.dailymotivation",
         BarcodeFormat.QR_CODE,
         qrSize,
         qrSize,

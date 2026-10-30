@@ -850,19 +850,6 @@ fun createQuoteShareImage(
     )
     sourceBitmap.recycle()
 
-    val shadePaint = Paint().apply {
-        shader = LinearGradient(
-            0f, 0f, 0f, height.toFloat(),
-            intArrayOf(
-                AndroidColor.argb(95, 0, 0, 0),
-                AndroidColor.argb(125, 0, 0, 0),
-                AndroidColor.argb(185, 0, 0, 0)
-            ),
-            floatArrayOf(0f, 0.48f, 1f),
-            Shader.TileMode.CLAMP
-        )
-    }
-    canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), shadePaint)
 
     val white = AndroidColor.WHITE
     val brandPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {

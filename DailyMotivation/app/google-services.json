@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "926799781760",
+    "project_id": "daily-motivation-3398b",
+    "storage_bucket": "daily-motivation-3398b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926799781760:android:5ada67562067465ddfeb65",
+        "android_client_info": {
+          "package_name": "Com.brightdays.dailymotivation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7-xKpv01ZkMlWbC2n5Jqd-ApOAin1knY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926799781760:android:f2b9572aeedeaef6dfeb65",
+        "android_client_info": {
+          "package_name": "com.brightdays.dailymotivation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7-xKpv01ZkMlWbC2n5Jqd-ApOAin1knY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

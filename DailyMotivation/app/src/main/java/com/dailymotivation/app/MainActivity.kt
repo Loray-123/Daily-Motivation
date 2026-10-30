@@ -1156,6 +1156,13 @@ fun FavoriteHeartButton(
                         fontSize = 34.sp,
                         lineHeight = 34.sp,
                         color = Color.White,
+                        style = androidx.compose.ui.text.TextStyle(
+                            shadow = androidx.compose.ui.graphics.Shadow(
+                                color = Color.Black.copy(alpha = 0.42f),
+                                offset = Offset(0f, 2f),
+                                blurRadius = 3f
+                            )
+                        ),
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
